@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Custom_GesternWave
+  m_Shader: {fileID: 4800000, guid: bf83ca31cfb391f4bb14b2a2b3385814, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _DuDvMap1:
+        m_Texture: {fileID: 2800000, guid: b5852d23c6d24774ba286af23aaad352, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DuDvMap2:
+        m_Texture: {fileID: 2800000, guid: 636319fd5d326f648ba0e25a811ffe65, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap1:
+        m_Texture: {fileID: 2800000, guid: 2a840f47398f9db4aa9a5f0dacb6fe0c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap2:
+        m_Texture: {fileID: 2800000, guid: ec1022e2539827a4ea2992ff55833da6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Amplitude1: 1
+    - _Amplitude2: 1
+    - _DistortionFactor: 0.3
+    - _SSPower: 10
+    - _SSScale: 0.1
+    - _Speed1: 10
+    - _Speed2: 1
+    - _Steepnes1: 0.5
+    - _Steepnes2: 0.5
+    - _Steepness1: 1
+    - _Steepness2: 0.5
+    - _SunThreshold: 49
+    - _WaterFog: 0.067
+    - _Wavelength1: 550
+    - _Wavelength2: 1000
+    m_Colors:
+    - _Direction1: {r: -0.25, g: 0.75, b: 0, a: 0}
+    - _Direction2: {r: 0.25, g: 0.55, b: 0, a: 0}
+    - _NormalMapScrollSpeed: {r: 0.5, g: 0.5, b: 1, a: 1}
+    - _WaveColor: {r: 0, g: 0.24704385, b: 1, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

@@ -66,5 +66,18 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj",
     },
-    "dotnet.defaultSolution": "WaterShaderNewNew.sln"
+    "dotnet.defaultSolution": "WaterShaderNewNew.sln",
+    "cSpell.words": [
+        "binormal",
+        "BRDF",
+        "CGPROGRAM",
+        "CLIPSPACE",
+        "ENDCG",
+        "Gestern",
+        "inout",
+        "Lerp",
+        "Mathf",
+        "TEXCUBE",
+        "Texel"
+    ]
 }
