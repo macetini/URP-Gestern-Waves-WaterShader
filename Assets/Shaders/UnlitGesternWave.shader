@@ -1,8 +1,7 @@
-﻿Shader "Custom/GesternWave"
+﻿Shader "Custom/Unlit_GesternWave"
 {
     Properties
-    {
-        //_MainTex ("Texture", 2D) = "white" {}
+    {                
         [HDR] _WaveColor ("Wave Color", Color) = (1,1,1,1)
 
 		_Wavelength1 ("Wavelength Wave A", Float) = 10
@@ -76,9 +75,6 @@
 			    half3 binormal;
 			    half3 tangent;			    
 		    };
-
-            //sampler2D _MainTex;
-            //float4 _MainTex_ST;
 
             half4 _WaveColor;
 
