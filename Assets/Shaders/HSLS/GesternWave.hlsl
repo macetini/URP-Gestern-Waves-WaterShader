@@ -2,6 +2,11 @@
 #ifndef GESTERN_WAVE_CALCULATION
 #define GESTERN_WAVE_CALCULATION
 
+// Define PI constant (Better safe than sorry)
+#ifndef PI
+#define PI 3.14159265359
+#endif
+
 struct WaveInfo
 {
     half wavelength; // (W)
