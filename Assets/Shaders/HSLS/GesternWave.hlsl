@@ -22,27 +22,27 @@ struct TangentSpace
 half3 CalculateGesternWave(WaveInfo wave, inout TangentSpace tangentSpace, half3 vertPos, half time)
 {
     // Wave number
-    half W = (2 * PI) / wave.wavelength;
+    half WaveNumber = (2 * PI) / wave.wavelength;
 
     // Angular frequency
-    half w = sqrt(9.81 * W);
+    half AngularFrequencyOmega = sqrt(9.81 * WaveNumber);
 
     // Phase
-    half PHI_t = wave.speed * w * time;
+    half PHI_t = wave.speed * AngularFrequencyOmega * time;
 
     // Direction vector (normalized)
     half2 D = normalize(wave.direction.xy);
 
     // Steepness factor
-    half Q = wave.steepness / (w * wave.amplitude * 2);
+    half Q = wave.steepness / (WaveNumber * wave.amplitude * 2);
 
     // Wave value
-    half f1 = W * dot(D, vertPos.xz) + PHI_t;
+    half f1 = WaveNumber * dot(D, vertPos.xz) + PHI_t;
     half S = sin(f1);
     half C = cos(f1);
 
     // Pre - calculated common terms
-    half WA = w * wave.amplitude;
+    half WA = WaveNumber * wave.amplitude;
     half WAS = WA * S; // w * A * sin(f1)
     half WAC = WA * C; // w * A * cos(f1)
 
@@ -104,9 +104,13 @@ half Speed_2,
 half Steepness_2,
 half2 Direction_2,
 
+// Final Vertex (Gestern Wave Displacement)
 out half3 WaveVertexPosition, // World Position - Will be transformed to OBJECT SPACE with Transform Node
-out half3 WaveVertexNormal, // Object Space Normal
-out half3 WaveAccumulatedNormal // Output : Object Space Normal (Accumulated, for custom use)
+
+// TBN MATRIX
+out half3 WaveVertexNormal, // Final World Normal (calculated via cross(B, T))
+out half3 WaveVertexBinormal, // Final World Binormal
+out half3 WaveVertexTangent // Final World Tangent
 )
 {
     WaveInfo wave_1 = {Wavelength_1, Amplitude_1, Speed_1, Steepness_1, Direction_1.xy, };
@@ -129,8 +133,8 @@ out half3 WaveAccumulatedNormal // Output : Object Space Normal (Accumulated, fo
 
     // Calculate the final Normal using the cross product of the accumulated Tangent and Binormal vectors.
     WaveVertexNormal = normalize(cross(tangentSpace.binormal, tangentSpace.tangent));
-
-    WaveAccumulatedNormal = normalize(tangentSpace.normal);
+    WaveVertexBinormal = normalize(tangentSpace.binormal);
+    WaveVertexTangent = normalize(tangentSpace.tangent);
 }
 
 #endif
