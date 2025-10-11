@@ -7,6 +7,11 @@
 #define PI 3.14159265359
 #endif
 
+// Define G (Gravity) constant
+#ifndef G
+#define G 9.81
+#endif
+
 struct WaveInfo
 {
     half wavelength; // (W)
@@ -24,30 +29,30 @@ struct TangentSpace
 };
 
 // -- - CORE WAVE CALCULATION (Per Wave) -- -
-half3 CalculateGesternWave(WaveInfo wave, inout TangentSpace tangentSpace, half3 vertPos, half time)
+half3 CalculateGesternWave(WaveInfo wave, inout TangentSpace tangentSpace, half3 vertPos, half l_time)
 {
-    // Wave number
-    half WaveNumber = (2 * PI) / wave.wavelength;
+    // Wave Quotient
+    half WaveQuotient = (2 * PI) / wave.wavelength;
 
     // Angular frequency
-    half AngularFrequencyOmega = sqrt(9.81 * WaveNumber);
+    half AngularFrequencyOmega = sqrt(G * WaveQuotient);
 
     // Phase
-    half PHI_t = wave.speed * AngularFrequencyOmega * time;
+    half PHI_t = wave.speed * AngularFrequencyOmega * l_time;
 
     // Direction vector (normalized)
     half2 D = normalize(wave.direction.xy);
 
     // Steepness factor
-    half Q = wave.steepness / (WaveNumber * wave.amplitude * 2);
+    half Q = wave.steepness / (WaveQuotient * wave.amplitude * 2);
 
     // Wave value
-    half f1 = WaveNumber * dot(D, vertPos.xz) + PHI_t;
+    half f1 = WaveQuotient * dot(D, vertPos.xz) + PHI_t;
     half S = sin(f1);
     half C = cos(f1);
 
     // Pre - calculated common terms
-    half WA = WaveNumber * wave.amplitude;
+    half WA = WaveQuotient * wave.amplitude;
     half WAS = WA * S; // w * A * sin(f1)
     half WAC = WA * C; // w * A * cos(f1)
 
@@ -73,7 +78,7 @@ half3 CalculateGesternWave(WaveInfo wave, inout TangentSpace tangentSpace, half3
     - (Q * (D.y * D.y) * WAC)
     );
 
-    // This calculation is preserved for your specific downstream logic.
+    // Derivative Y (Normal contribution)
     tangentSpace.normal += half3
     (
     D.x * WAC,
@@ -84,12 +89,14 @@ half3 CalculateGesternWave(WaveInfo wave, inout TangentSpace tangentSpace, half3
     // Displacement for this wave, Delta P
     half f4 = Q * wave.amplitude * C;
 
-    return half3
+    half3 gesternWavePoint = half3
     (
     f4 * D.x, // X Displacement
     wave.amplitude * S, // Y Displacement
     f4 * D.y // Z Displacement
     );
+
+    return gesternWavePoint;
 }
 
 void GerstnerWave_float(
