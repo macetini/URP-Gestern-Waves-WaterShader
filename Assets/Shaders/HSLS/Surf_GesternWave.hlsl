@@ -75,6 +75,8 @@ half3 worldPos,
 half4 screenPos,
 half2 uvBase,
 
+half glintChoppiness,
+
 UnityTexture2D normalMap1,
 UnityTexture2D duDvMap1,
 half2 normalMap1speed,
@@ -144,7 +146,7 @@ half distortionFactor
     half3 worldSpaceCombinedNormal = normalize(mul(setupVectors.tangentSpaceMatrix, setupVectors.combinedTangentNormal));
     // Blend the base Gerstner normal (worldNormal) with the high - frequency normal map detail (worldSpaceCombinedNormal),
     // weighted by _GlintChoppiness (which acts as a normal strength factor)
-    setupVectors.finalNormal = normalize(setupVectors.worldNormal + (worldSpaceCombinedNormal)); // * _GlintChoppiness)); TODO - Dont forget to implement
+    setupVectors.finalNormal = normalize(setupVectors.worldNormal + (worldSpaceCombinedNormal * glintChoppiness));
     //
 
     // CALCULATE LIGHTING DATA
@@ -193,7 +195,9 @@ half2 NormalMap_1_ScrollSpeed,
 UnityTexture2D NormalMap2,
 UnityTexture2D DuDvMap2,
 half2 NormalMap_2_ScrollSpeed,
+
 half DistortionFactor,
+half GlintChoppiness,
 
 half3 MainLightDirection,
 
@@ -206,6 +210,8 @@ out half3 FinalNormal
     WorldPos,
     ScreenPos,
     UV_Base,
+
+    GlintChoppiness,
 
     NormalMap1,
     DuDvMap1,
