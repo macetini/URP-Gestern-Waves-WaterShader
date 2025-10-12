@@ -29,9 +29,9 @@ struct SurfaceDataVectors
     half4 duDvMapCoords;
 
     half3x3 tangentSpaceMatrix;
-    
+
     half3 combinedTangentNormal; // Combined tangent space normal for lighting
-    
+
     half3 distortionVector;
 
     half3 worldNormal;
@@ -52,6 +52,8 @@ struct InitMeta
 
 struct MapsMeta
 {
+    half time;
+
     UnityTexture2D normalMap1;
     UnityTexture2D duDvMap1;
     half2 normalMap1speed;
@@ -73,25 +75,25 @@ SurfaceDataVectors InitSurfaceData(InitMeta initMeta)
     return dataVectors;
 }
 
-half3 CalculateDistortionNormal(UnityTexture2D duDvMap1, UnityTexture2D duDvMap2, half4 duDvMapCoords, half3x3 tangentSpaceMatrix)
+half3 CalculateDistortionNormal(SurfaceDataVectors dataVectors, MapsMeta mapsMeta)
 {
-    half3 duDvMap1s = UnpackNormal(tex2D(duDvMap1, duDvMapCoords.xy));
-    half3 duDvMap2s = UnpackNormal(tex2D(duDvMap2, duDvMapCoords.zw));
+    half3 duDvMap1s = UnpackNormal(tex2D(mapsMeta.duDvMap1, dataVectors.duDvMapCoords.xy));
+    half3 duDvMap2s = UnpackNormal(tex2D(mapsMeta.duDvMap2, dataVectors.duDvMapCoords.zw));
 
     half3 duDVMapSum = duDvMap1s + duDvMap2s;
 
     // Transform the combined tangent space DuDv map into a world space direction vector
-    half3 combinedDuDvNormal = normalize(mul(tangentSpaceMatrix, duDVMapSum));
+    half3 combinedDuDvNormal = normalize(mul(dataVectors.tangentSpaceMatrix, duDVMapSum));
     return combinedDuDvNormal;
 }
 
-SurfaceDataVectors SampleMaps(half time, SurfaceDataVectors dataVectors, MapsMeta mapsMeta)
+SurfaceDataVectors SampleMaps(SurfaceDataVectors dataVectors, MapsMeta mapsMeta)
 {
     // UVs for the actual lighting normal maps
     // We use a slightly faster scroll speed or a different tiling factor (0.5 here)
     // to make the two sets of maps look slightly different
-    dataVectors.normalMapCoords.xy = dataVectors.uvBase.xy + mapsMeta.normalMap1speed.xy * time * 0.5;
-    dataVectors.normalMapCoords.zw = dataVectors.uvBase.xy + mapsMeta.normalMap2speed.xy * time * 0.5;
+    dataVectors.normalMapCoords.xy = dataVectors.uvBase.xy + mapsMeta.normalMap1speed.xy * mapsMeta.time * 0.5;
+    dataVectors.normalMapCoords.zw = dataVectors.uvBase.xy + mapsMeta.normalMap2speed.xy * mapsMeta.time * 0.5;
 
     // Calculate the final, combined TANGENT SPACE normal vector for the surface lighting
     half3 normalMap1s = UnpackNormal(tex2D(mapsMeta.normalMap1, dataVectors.normalMapCoords.xy));
@@ -101,12 +103,11 @@ SurfaceDataVectors SampleMaps(half time, SurfaceDataVectors dataVectors, MapsMet
     //
 
     // UVs for DuDv distortion maps
-    dataVectors.duDvMapCoords.xy = dataVectors.uvBase.xy + mapsMeta.normalMap1speed.xy * time;
-    dataVectors.duDvMapCoords.zw = dataVectors.uvBase.xy + mapsMeta.normalMap2speed.xy * time;
+    dataVectors.duDvMapCoords.xy = dataVectors.uvBase.xy + mapsMeta.normalMap1speed.xy * mapsMeta.time;
+    dataVectors.duDvMapCoords.zw = dataVectors.uvBase.xy + mapsMeta.normalMap2speed.xy * mapsMeta.time;
 
     // Distortion Calculation (Uses DuDv maps and is used for refraction)
-    half3 combinedDuDvNormal = CalculateDistortionNormal(
-    mapsMeta.duDvMap1, mapsMeta.duDvMap2, dataVectors.duDvMapCoords, dataVectors.tangentSpaceMatrix);
+    half3 combinedDuDvNormal = CalculateDistortionNormal(dataVectors, mapsMeta);
 
     dataVectors.distortionVector = combinedDuDvNormal * mapsMeta.distortionFactor;
 
@@ -155,42 +156,6 @@ SurfaceDataVectors CalculateLightningData(SurfaceDataVectors dataVectors, half3 
     return dataVectors;
 }
 
-SurfaceDataVectors CalculateDataVectors(half time, half3 worldPos, half4 screenPos, half2 uvBase, half glintChoppiness, UnityTexture2D normalMap1, UnityTexture2D duDvMap1, half2 normalMap1speed, UnityTexture2D normalMap2, UnityTexture2D duDvMap2, half2 normalMap2speed, half3 mainLightDirection, half distortionFactor)
-{
-    // SET UP MAIN VECTORS
-    InitMeta initMeta;
-    initMeta.worldPos = worldPos;
-    initMeta.screenPos = screenPos;
-    initMeta.uvBase = uvBase;
-
-    SurfaceDataVectors dataVectors = InitSurfaceData(initMeta);
-
-    // -- SAMPLE TEXTURE MAPS --
-    MapsMeta mapsMeta;
-
-    mapsMeta.normalMap1 = normalMap1;
-    mapsMeta.duDvMap1 = duDvMap1;
-    mapsMeta.normalMap1speed = normalMap1speed;
-    mapsMeta.normalMap2 = normalMap2;
-    mapsMeta.duDvMap2 = duDvMap2;
-    mapsMeta.normalMap2speed = normalMap2speed;
-    mapsMeta.distortionFactor = distortionFactor;
-
-    dataVectors = SampleMaps(time, dataVectors, mapsMeta);
-    //
-
-    // -- CALCULATE TBN SPACE MATRIX --
-    dataVectors = CalculateGesternWaveTangentSpaceMatrix(dataVectors);
-
-    // The Final Distorted World Normal (Used for ALL lighting / reflection)
-    dataVectors = CalculateFinalDistortedNormal(dataVectors, glintChoppiness);
-
-    // CALCULATE LIGHTING DATA
-    dataVectors = CalculateLightningData(dataVectors, mainLightDirection);
-
-    return dataVectors;
-}
-
 half3 GetBaseSurfaceColor(SurfaceDataVectors dataVectors, half3 reflectionColor, float3 baseWaterColor)
 {
     // Now _WaveColor is the primary base color, no need for redundant texture sampling.
@@ -234,26 +199,37 @@ half3 MainLightDirection,
 out half3 Emission,
 out half3 FinalNormal
 ) {
-    SurfaceDataVectors dataVectors = CalculateDataVectors (
-    Time,
+    // SET UP MAIN VECTORS
+    InitMeta initMeta;
+    initMeta.worldPos = WorldPos;
+    initMeta.screenPos = ScreenPos;
+    initMeta.uvBase = UV_Base;
 
-    WorldPos,
-    ScreenPos,
-    UV_Base,
+    SurfaceDataVectors dataVectors = InitSurfaceData(initMeta);
 
-    GlintChoppiness,
+    // -- SAMPLE TEXTURE MAPS --
+    MapsMeta mapsMeta;
 
-    NormalMap1,
-    DuDvMap1,
-    NormalMap_1_ScrollSpeed,
+    mapsMeta.time = Time;
+    mapsMeta.normalMap1 = NormalMap1;
+    mapsMeta.duDvMap1 = DuDvMap1;
+    mapsMeta.normalMap1speed = NormalMap_1_ScrollSpeed;
+    mapsMeta.normalMap2 = NormalMap2;
+    mapsMeta.duDvMap2 = DuDvMap2;
+    mapsMeta.normalMap2speed = NormalMap_2_ScrollSpeed;
+    mapsMeta.distortionFactor = DistortionFactor;
 
-    NormalMap2,
-    DuDvMap2,
-    NormalMap_1_ScrollSpeed,
-    DistortionFactor,
+    dataVectors = SampleMaps(dataVectors, mapsMeta);
+    //
 
-    MainLightDirection
-    );
+    // -- CALCULATE TBN SPACE MATRIX --
+    dataVectors = CalculateGesternWaveTangentSpaceMatrix(dataVectors);
+
+    // The Final Distorted World Normal (Used for ALL lighting / reflection)
+    dataVectors = CalculateFinalDistortedNormal(dataVectors, GlintChoppiness);
+
+    // CALCULATE LIGHTING DATA
+    dataVectors = CalculateLightningData(dataVectors, MainLightDirection);
 
     half3 skyReflection = 0;
 
