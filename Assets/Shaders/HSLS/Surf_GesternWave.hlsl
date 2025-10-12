@@ -22,18 +22,16 @@ half3 CalculateWorldSpaceViewDir(half3 WorldPos)
 
 struct SurfaceDataVectors
 {
-    float4 screenPos;
-    float3 worldPos;
+    half3 worldPos;
     half2 uvBase;
 
     half4 normalMapCoords;
     half4 duDvMapCoords;
 
     half3x3 tangentSpaceMatrix;
-
+    
     half3 combinedTangentNormal; // Combined tangent space normal for lighting
-
-    half3 combinedDuDvNormal;
+    
     half3 distortionVector;
 
     half3 worldNormal;
@@ -45,11 +43,32 @@ struct SurfaceDataVectors
     half viewDotNormal;
 };
 
-SurfaceDataVectors InitDataVectors(SurfaceDataVectors dataVectors, half3 worldPos, half4 screenPos, half2 uvBase)
+struct InitMeta
 {
-    dataVectors.worldPos = worldPos;
-    dataVectors.screenPos = screenPos;
-    dataVectors.uvBase = uvBase;
+    half3 worldPos;
+    half4 screenPos; //Used once
+    half2 uvBase;
+};
+
+struct MapsMeta
+{
+    UnityTexture2D normalMap1;
+    UnityTexture2D duDvMap1;
+    half2 normalMap1speed;
+
+    UnityTexture2D normalMap2;
+    UnityTexture2D duDvMap2;
+    half2 normalMap2speed;
+
+    half distortionFactor;
+};
+
+SurfaceDataVectors InitSurfaceData(InitMeta initMeta)
+{
+    SurfaceDataVectors dataVectors;
+
+    dataVectors.worldPos = initMeta.worldPos;
+    dataVectors.uvBase = initMeta.uvBase;
 
     return dataVectors;
 }
@@ -66,30 +85,30 @@ half3 CalculateDistortionNormal(UnityTexture2D duDvMap1, UnityTexture2D duDvMap2
     return combinedDuDvNormal;
 }
 
-SurfaceDataVectors SampleMaps(half time, SurfaceDataVectors dataVectors, UnityTexture2D normalMap1, UnityTexture2D duDvMap1, half2 normalMap1speed, UnityTexture2D normalMap2, UnityTexture2D duDvMap2, half2 normalMap2speed, half distortionFactor)
+SurfaceDataVectors SampleMaps(half time, SurfaceDataVectors dataVectors, MapsMeta mapsMeta)
 {
     // UVs for the actual lighting normal maps
     // We use a slightly faster scroll speed or a different tiling factor (0.5 here)
     // to make the two sets of maps look slightly different
-    dataVectors.normalMapCoords.xy = dataVectors.uvBase.xy + normalMap1speed.xy * time * 0.5;
-    dataVectors.normalMapCoords.zw = dataVectors.uvBase.xy + normalMap2speed.xy * time * 0.5;
+    dataVectors.normalMapCoords.xy = dataVectors.uvBase.xy + mapsMeta.normalMap1speed.xy * time * 0.5;
+    dataVectors.normalMapCoords.zw = dataVectors.uvBase.xy + mapsMeta.normalMap2speed.xy * time * 0.5;
 
     // Calculate the final, combined TANGENT SPACE normal vector for the surface lighting
-    half3 normalMap1s = UnpackNormal(tex2D(normalMap1, dataVectors.normalMapCoords.xy));
-    half3 normalMap2s = UnpackNormal(tex2D(normalMap2, dataVectors.normalMapCoords.zw));
+    half3 normalMap1s = UnpackNormal(tex2D(mapsMeta.normalMap1, dataVectors.normalMapCoords.xy));
+    half3 normalMap2s = UnpackNormal(tex2D(mapsMeta.normalMap2, dataVectors.normalMapCoords.zw));
     // Combine both normal maps in tangent space
     dataVectors.combinedTangentNormal = normalMap1s + normalMap2s;
     //
 
     // UVs for DuDv distortion maps
-    dataVectors.duDvMapCoords.xy = dataVectors.uvBase.xy + normalMap1speed.xy * time;
-    dataVectors.duDvMapCoords.zw = dataVectors.uvBase.xy + normalMap2speed.xy * time;
+    dataVectors.duDvMapCoords.xy = dataVectors.uvBase.xy + mapsMeta.normalMap1speed.xy * time;
+    dataVectors.duDvMapCoords.zw = dataVectors.uvBase.xy + mapsMeta.normalMap2speed.xy * time;
 
     // Distortion Calculation (Uses DuDv maps and is used for refraction)
-    dataVectors.combinedDuDvNormal = CalculateDistortionNormal(
-    duDvMap1, duDvMap2, dataVectors.duDvMapCoords, dataVectors.tangentSpaceMatrix);
+    half3 combinedDuDvNormal = CalculateDistortionNormal(
+    mapsMeta.duDvMap1, mapsMeta.duDvMap2, dataVectors.duDvMapCoords, dataVectors.tangentSpaceMatrix);
 
-    dataVectors.distortionVector = dataVectors.combinedDuDvNormal * distortionFactor;
+    dataVectors.distortionVector = combinedDuDvNormal * mapsMeta.distortionFactor;
 
     return dataVectors;
 }
@@ -138,13 +157,27 @@ SurfaceDataVectors CalculateLightningData(SurfaceDataVectors dataVectors, half3 
 
 SurfaceDataVectors CalculateDataVectors(half time, half3 worldPos, half4 screenPos, half2 uvBase, half glintChoppiness, UnityTexture2D normalMap1, UnityTexture2D duDvMap1, half2 normalMap1speed, UnityTexture2D normalMap2, UnityTexture2D duDvMap2, half2 normalMap2speed, half3 mainLightDirection, half distortionFactor)
 {
-    SurfaceDataVectors dataVectors;
-
     // SET UP MAIN VECTORS
-    dataVectors = InitDataVectors(dataVectors, worldPos, screenPos, uvBase);
+    InitMeta initMeta;
+    initMeta.worldPos = worldPos;
+    initMeta.screenPos = screenPos;
+    initMeta.uvBase = uvBase;
+
+    SurfaceDataVectors dataVectors = InitSurfaceData(initMeta);
 
     // -- SAMPLE TEXTURE MAPS --
-    dataVectors = SampleMaps(time, dataVectors, normalMap1, duDvMap1, normalMap1speed, normalMap2, duDvMap2, normalMap2speed, distortionFactor);
+    MapsMeta mapsMeta;
+
+    mapsMeta.normalMap1 = normalMap1;
+    mapsMeta.duDvMap1 = duDvMap1;
+    mapsMeta.normalMap1speed = normalMap1speed;
+    mapsMeta.normalMap2 = normalMap2;
+    mapsMeta.duDvMap2 = duDvMap2;
+    mapsMeta.normalMap2speed = normalMap2speed;
+    mapsMeta.distortionFactor = distortionFactor;
+
+    dataVectors = SampleMaps(time, dataVectors, mapsMeta);
+    //
 
     // -- CALCULATE TBN SPACE MATRIX --
     dataVectors = CalculateGesternWaveTangentSpaceMatrix(dataVectors);
