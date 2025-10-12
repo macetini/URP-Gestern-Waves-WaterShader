@@ -1,6 +1,6 @@
 // GesternWave.hlsl - Calculates the 3D position offset (displacement) for a single wave.
-#ifndef GESTERN_WAVE_CALCULATION
-#define GESTERN_WAVE_CALCULATION
+#ifndef VERT_GESTERN_WAVE_CALCULATION
+#define VERT_GESTERN_WAVE_CALCULATION
 
 // Define PI constant (Better safe than sorry)
 #ifndef PI
@@ -99,7 +99,7 @@ half3 CalculateGesternWave(WaveInfo wave, inout TangentSpace tangentSpace, half3
     return gesternWavePoint;
 }
 
-void GerstnerWave_float(
+void Vert_GerstnerWave_float(
 
 half3 WorldSpaceVertPos, // Object Space Position
 half Time,
@@ -117,11 +117,12 @@ half Steepness_2,
 half2 Direction_2,
 
 // Final Vertex (Gestern Wave Displacement)
-out half3 WaveVertexPosition, // World Position - Will be transformed to OBJECT SPACE with Transform Node
+out half3 WorldPos, // World Position - Will be transformed to OBJECT SPACE with Transform Node
+out half2 UV_Base,
 
 // TBN MATRIX
 out half3 WaveVertexNormal, // Final World Normal (calculated via cross(B, T))
-out half3 WaveVertexBinormal, // Final World Binormal
+//out half3 WaveVertexBiNormal, // Final World Normal
 out half3 WaveVertexTangent // Final World Tangent
 )
 {
@@ -141,11 +142,12 @@ out half3 WaveVertexTangent // Final World Tangent
     displacedVertPos += CalculateGesternWave(wave_1, tangentSpace, displacedVertPos, Time);
     displacedVertPos += CalculateGesternWave(wave_2, tangentSpace, displacedVertPos, Time);
 
-    WaveVertexPosition = displacedVertPos; // Will be transformed to OBJECT SPACE with Transform Node
+    WorldPos = displacedVertPos; // Will be transformed to OBJECT SPACE with Transform Node
+    UV_Base = displacedVertPos.xy;
 
     // Calculate the final Normal using the cross product of the accumulated Tangent and Binormal vectors.
     WaveVertexNormal = normalize(cross(tangentSpace.binormal, tangentSpace.tangent));
-    WaveVertexBinormal = normalize(tangentSpace.binormal);
+    //WaveVertexBiNormal = normalize(tangentSpace.binormal);
     WaveVertexTangent = normalize(tangentSpace.tangent);
 }
 
