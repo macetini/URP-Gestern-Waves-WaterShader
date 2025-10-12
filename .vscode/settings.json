@@ -72,6 +72,7 @@
     "binormal",
     "Bitangent",
     "BRDF",
+    "CBUFFER",
     "CGPROGRAM",
     "CLIPSPACE",
     "cubemap",
@@ -91,8 +92,11 @@
     "Ndot",
     "Orthogonalization",
     "Orthogonalize",
+    "samplerunity",
+    "Schlick's",
     "Skybox",
     "TEXCUBE",
-    "Texel"
+    "Texel",
+    "TEXTURECUBE"
   ]
 }

@@ -144,10 +144,9 @@ SurfaceDataVectors CalculateFinalDistortedNormal(SurfaceDataVectors dataVectors,
 }
 
 SurfaceDataVectors CalculateLightningData(SurfaceDataVectors dataVectors, half3 mainLightDirection)
-{
-    //dataVectors.worldViewDir = normalize(UnityWorldSpaceViewDir(input.worldPos));
+{    
     dataVectors.worldViewDir = normalize(CalculateWorldSpaceViewDir(dataVectors.worldPos));
-    dataVectors.lightDir = mainLightDirection; //normalize(_MainLightPosition.xyz); // TODO - Make sure switch to node works !
+    dataVectors.lightDir = mainLightDirection;
 
     // The Shared Reflection Vector (Calculated once)
     dataVectors.reflectionVector = reflect(- dataVectors.worldViewDir, dataVectors.finalNormal);
@@ -177,7 +176,8 @@ half GlintChoppiness,
 half3 MainLightDirection,
 
 out half3 FinalNormal,
-out half ViewDotNormal
+out half ViewDotNormal,
+out half3 ReflectionVector
 ) {
     // SET UP MAIN DATA
     InitMeta initMeta;
@@ -210,10 +210,11 @@ out half ViewDotNormal
     dataVectors = CalculateFinalDistortedNormal(dataVectors, GlintChoppiness);
 
     // CALCULATE LIGHTING DATA
-    dataVectors = CalculateLightningData(dataVectors, MainLightDirection);        
+    dataVectors = CalculateLightningData(dataVectors, MainLightDirection);
 
     FinalNormal = dataVectors.finalNormal;
     ViewDotNormal = dataVectors.viewDotNormal;
+    ReflectionVector = dataVectors.reflectionVector;
 }
 
 #endif

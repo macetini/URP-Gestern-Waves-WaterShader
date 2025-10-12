@@ -90,6 +90,7 @@ Material:
     - _GlintChoppiness: 1
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ReflectionIntensity: 0.02
     - _TimeScale: 0
     - _Wave1Amplitude: 3
     - _Wave1Speed: 0.2

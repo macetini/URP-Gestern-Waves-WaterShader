@@ -2,16 +2,6 @@
 #ifndef BASE_COLOR_NODE
 #define BASE_COLOR_NODE
 
-// Define PI constant (Better safe than sorry)
-#ifndef PI
-#define PI 3.14159265359
-#endif
-
-// Define G (Gravity) constant
-#ifndef G
-#define G 9.81
-#endif
-
 void BaseColor_float(
 float3 SurfaceColor,
 float3 ReflectionColor,
