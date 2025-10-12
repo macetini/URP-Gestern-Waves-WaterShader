@@ -120,7 +120,6 @@ half distortionFactor
     duDvMap1, duDvMap2, setupVectors.duDvMapCoords, setupVectors.tangentSpaceMatrix);
 
     setupVectors.distortionVector = setupVectors.combinedDuDvNormal * distortionFactor;
-    //
     // -- SAMPLE TEXTURES END --
 
 
@@ -132,11 +131,11 @@ half distortionFactor
     setupVectors.worldNormal = geometricWorldNormal;
 
     // Re - orthogonalize T and B relative to the correct geometric normal
-    worldBinormal = normalize(cross(geometricWorldNormal, worldTangent));
-    worldTangent = normalize(cross(worldBinormal, geometricWorldNormal));
+    worldBinormal = normalize(cross(setupVectors.worldNormal, worldTangent));
+    worldTangent = normalize(cross(worldBinormal, setupVectors.worldNormal));
 
     // Build the TBN matrix for applying normal map details
-    setupVectors.tangentSpaceMatrix = half3x3(worldTangent, worldBinormal, geometricWorldNormal);
+    setupVectors.tangentSpaceMatrix = half3x3(worldTangent, worldBinormal, setupVectors.worldNormal);
     // -- CALCULATE TBN BASIS VECTORS END --
 
 
@@ -150,7 +149,7 @@ half distortionFactor
 
     // CALCULATE LIGHTING DATA
     //setupVectors.worldViewDir = normalize(UnityWorldSpaceViewDir(input.worldPos));
-    setupVectors.worldViewDir = normalize(CalculateWorldSpaceViewDir(worldPos));
+    setupVectors.worldViewDir = normalize(CalculateWorldSpaceViewDir(setupVectors.worldPos));
     setupVectors.lightDir = mainLightDirection; //normalize(_MainLightPosition.xyz); // TODO - Make sure switch to node works !
     // The Shared Reflection Vector (Calculated once)
     setupVectors.reflectionVector = reflect(- setupVectors.worldViewDir, setupVectors.finalNormal);
@@ -160,12 +159,32 @@ half distortionFactor
     return setupVectors;
 }
 
+half3 GetBaseSurfaceColor(SurfaceDataVectors setupVectors, half3 reflectionColor, float3 baseWaterColor)
+{
+    // Now _WaveColor is the primary base color, no need for redundant texture sampling.
+    //half3 baseWaterColor = waveColor.rgb;
+
+    // -- - TEXTURE SURFACE CHECK -- -
+    //#ifdef _ENABLE_COLOR_SURFACE_ON
+    // If pure texture mode is on, return the tinted wave color directly.
+    //return baseWaterColor;
+    //#else
+    // Otherwise, use Fresnel to blend the base color with the reflection color.
+    half reflectionFactor = pow(1.0 - saturate(setupVectors.viewDotNormal), 5.0); // Standard Fresnel
+    half3 blendedColor = lerp(baseWaterColor, reflectionColor, reflectionFactor);
+
+    return blendedColor;
+    //#endif
+}
+
 void Surf_GerstnerWave_float(
 half Time,
 
 half3 WorldPos, // World Position - Will be transformed to OBJECT SPACE with Transform Node
 half4 ScreenPos,
 half2 UV_Base,
+
+float3 WaveColor,
 
 UnityTexture2D NormalMap1,
 UnityTexture2D DuDvMap1,
@@ -178,9 +197,10 @@ half DistortionFactor,
 
 half3 MainLightDirection,
 
-out half3 Out
+out half3 Emission,
+out half3 FinalNormal
 ) {
-    SurfaceDataVectors v = CalculateSetupVectors (
+    SurfaceDataVectors setupVectors = CalculateSetupVectors (
     Time,
 
     WorldPos,
@@ -199,7 +219,12 @@ out half3 Out
     MainLightDirection
     );
 
-    Out = v.worldPos;
+    half3 skyReflection = 0;
+
+    half3 emission = GetBaseSurfaceColor(setupVectors, skyReflection, WaveColor);
+
+    Emission = emission;
+    FinalNormal = setupVectors.finalNormal;
 }
 
 #endif

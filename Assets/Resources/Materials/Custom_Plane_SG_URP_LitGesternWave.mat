@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1345437222153094173
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 9
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Custom_Plane_SG_URP_LitGesternWave
+  m_Shader: {fileID: -6465566751694194690, guid: dc4234cdbb9e68245b9f596cea3634b5, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 2
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _DuDvMap1:
+        m_Texture: {fileID: 2800000, guid: ec1022e2539827a4ea2992ff55833da6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DuDvMap2:
+        m_Texture: {fileID: 2800000, guid: 636319fd5d326f648ba0e25a811ffe65, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FoamTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap1:
+        m_Texture: {fileID: 2800000, guid: 2a840f47398f9db4aa9a5f0dacb6fe0c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap2:
+        m_Texture: {fileID: 2800000, guid: b5852d23c6d24774ba286af23aaad352, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SurfGerstnerWaveCustomFunction_752129e498f744b29658e0c7e22fbfd0_DuDvMap1_6_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SurfGerstnerWaveCustomFunction_752129e498f744b29658e0c7e22fbfd0_DuDvMap2_8_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SurfGerstnerWaveCustomFunction_752129e498f744b29658e0c7e22fbfd0_NormalMap2_7_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _DepthIntensity: 10
+    - _DistortionFactor: 0
+    - _FoamDepth: 0.15
+    - _FresnelPower: 3
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _TimeScale: 0
+    - _Wave1Amplitude: 0.5
+    - _Wave1Speed: 1
+    - _Wave1Steepness: 0
+    - _Wave1Wavelength: 10
+    - _Wave2Amplitude: 0.25
+    - _Wave2Speed: 0.8
+    - _Wave2Steepness: 0.9
+    - _Wave2Wavelength: 4
+    m_Colors:
+    - _DeepColor: {r: 0.05882353, g: 0.2078431, b: 0.3372549, a: 0}
+    - _DisplacedUV: {r: 0, g: 0, b: 0, a: 0}
+    - _FoamColor: {r: 0, g: 0, b: 0, a: 0}
+    - _NormalMap_1_ScrollSpeed: {r: 1, g: 1, b: 0, a: 0}
+    - _NormalMap_2_ScrollSpeed: {r: 1, g: 1, b: 0, a: 0}
+    - _ShallowColor: {r: 0, g: 0, b: 0, a: 0}
+    - _Wave1Direction: {r: 1, g: 0.5, b: 0, a: 0}
+    - _Wave2Direction: {r: 0.5, g: 1, b: 0, a: 0}
+    - _WaveColor: {r: 0, g: 0, b: 1, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
