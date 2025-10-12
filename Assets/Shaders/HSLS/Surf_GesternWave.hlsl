@@ -19,20 +19,17 @@ half3 CalculateWorldSpaceViewDir(half3 WorldPos)
     // View Direction (V) = normalize(Camera Position - Fragment Position)
     return normalize(_WorldSpaceCameraPos.xyz - WorldPos);
 }
-//
 
 struct SurfaceDataVectors
 {
-    // Set Up
     float4 screenPos;
     float3 worldPos;
+    half2 uvBase;
 
     half4 normalMapCoords;
     half4 duDvMapCoords;
 
     half3x3 tangentSpaceMatrix;
-
-    // Calculated
 
     half3 combinedTangentNormal; // Combined tangent space normal for lighting
 
@@ -48,15 +45,17 @@ struct SurfaceDataVectors
     half viewDotNormal;
 };
 
-half3 CalculateDistortionNormal
-(
-UnityTexture2D duDvMap1,
-UnityTexture2D duDvMap2,
+SurfaceDataVectors InitDataVectors(SurfaceDataVectors dataVectors, half3 worldPos, half4 screenPos, half2 uvBase)
+{
+    dataVectors.worldPos = worldPos;
+    dataVectors.screenPos = screenPos;
+    dataVectors.uvBase = uvBase;
 
-half4 duDvMapCoords,
+    return dataVectors;
+}
 
-half3x3 tangentSpaceMatrix
-) {
+half3 CalculateDistortionNormal(UnityTexture2D duDvMap1, UnityTexture2D duDvMap2, half4 duDvMapCoords, half3x3 tangentSpaceMatrix)
+{
     half3 duDvMap1s = UnpackNormal(tex2D(duDvMap1, duDvMapCoords.xy));
     half3 duDvMap2s = UnpackNormal(tex2D(duDvMap2, duDvMapCoords.zw));
 
@@ -64,104 +63,102 @@ half3x3 tangentSpaceMatrix
 
     // Transform the combined tangent space DuDv map into a world space direction vector
     half3 combinedDuDvNormal = normalize(mul(tangentSpaceMatrix, duDVMapSum));
-
     return combinedDuDvNormal;
 }
 
-SurfaceDataVectors CalculateSetupVectors(
-half time,
-
-half3 worldPos,
-half4 screenPos,
-half2 uvBase,
-
-half glintChoppiness,
-
-UnityTexture2D normalMap1,
-UnityTexture2D duDvMap1,
-half2 normalMap1speed,
-
-UnityTexture2D normalMap2,
-UnityTexture2D duDvMap2,
-half2 normalMap2speed,
-
-half3 mainLightDirection,
-
-half distortionFactor
-) {
-    // Return struct
-    SurfaceDataVectors setupVectors;
-    //
-
-    // SET UP MAIN VECTORS
-    setupVectors.worldPos = worldPos;
-    setupVectors.screenPos = screenPos;
-    //
-
-
-    // -- SAMPLE TEXTURES START --
+SurfaceDataVectors SampleMaps(half time, SurfaceDataVectors dataVectors, UnityTexture2D normalMap1, UnityTexture2D duDvMap1, half2 normalMap1speed, UnityTexture2D normalMap2, UnityTexture2D duDvMap2, half2 normalMap2speed, half distortionFactor)
+{
     // UVs for the actual lighting normal maps
     // We use a slightly faster scroll speed or a different tiling factor (0.5 here)
     // to make the two sets of maps look slightly different
-    setupVectors.normalMapCoords.xy = uvBase.xy + normalMap1speed.xy * time * 0.5;
-    setupVectors.normalMapCoords.zw = uvBase.xy + normalMap2speed.xy * time * 0.5;
+    dataVectors.normalMapCoords.xy = dataVectors.uvBase.xy + normalMap1speed.xy * time * 0.5;
+    dataVectors.normalMapCoords.zw = dataVectors.uvBase.xy + normalMap2speed.xy * time * 0.5;
 
     // Calculate the final, combined TANGENT SPACE normal vector for the surface lighting
-    half3 normalMap1s = UnpackNormal(tex2D(normalMap1, setupVectors.normalMapCoords.xy));
-    half3 normalMap2s = UnpackNormal(tex2D(normalMap2, setupVectors.normalMapCoords.zw));
+    half3 normalMap1s = UnpackNormal(tex2D(normalMap1, dataVectors.normalMapCoords.xy));
+    half3 normalMap2s = UnpackNormal(tex2D(normalMap2, dataVectors.normalMapCoords.zw));
     // Combine both normal maps in tangent space
-    setupVectors.combinedTangentNormal = normalMap1s + normalMap2s;
+    dataVectors.combinedTangentNormal = normalMap1s + normalMap2s;
     //
 
     // UVs for DuDv distortion maps
-    setupVectors.duDvMapCoords.xy = uvBase.xy + normalMap1speed.xy * time;
-    setupVectors.duDvMapCoords.zw = uvBase.xy + normalMap2speed.xy * time;
+    dataVectors.duDvMapCoords.xy = dataVectors.uvBase.xy + normalMap1speed.xy * time;
+    dataVectors.duDvMapCoords.zw = dataVectors.uvBase.xy + normalMap2speed.xy * time;
 
     // Distortion Calculation (Uses DuDv maps and is used for refraction)
-    setupVectors.combinedDuDvNormal = CalculateDistortionNormal(
-    duDvMap1, duDvMap2, setupVectors.duDvMapCoords, setupVectors.tangentSpaceMatrix);
+    dataVectors.combinedDuDvNormal = CalculateDistortionNormal(
+    duDvMap1, duDvMap2, dataVectors.duDvMapCoords, dataVectors.tangentSpaceMatrix);
 
-    setupVectors.distortionVector = setupVectors.combinedDuDvNormal * distortionFactor;
-    // -- SAMPLE TEXTURES END --
+    dataVectors.distortionVector = dataVectors.combinedDuDvNormal * distortionFactor;
 
-
-    // -- CALCULATE TBN BASIS VECTORS START (Based on Gerstner Waves) --
-    // ddx / ddy calculate the vector change in X and Y screen space directions (local derivatives)
-    half3 worldTangent = normalize(ddx(worldPos));
-    half3 worldBinormal = normalize(ddy(worldPos));
-    half3 geometricWorldNormal = normalize(cross(worldTangent, worldBinormal)); // Gerstner Wave Normal
-    setupVectors.worldNormal = geometricWorldNormal;
-
-    // Re - orthogonalize T and B relative to the correct geometric normal
-    worldBinormal = normalize(cross(setupVectors.worldNormal, worldTangent));
-    worldTangent = normalize(cross(worldBinormal, setupVectors.worldNormal));
-
-    // Build the TBN matrix for applying normal map details
-    setupVectors.tangentSpaceMatrix = half3x3(worldTangent, worldBinormal, setupVectors.worldNormal);
-    // -- CALCULATE TBN BASIS VECTORS END --
-
-
-    // The Final Distorted World Normal (Used for ALL lighting / reflection)
-    // Transform the combined tangent space normal to world space
-    half3 worldSpaceCombinedNormal = normalize(mul(setupVectors.tangentSpaceMatrix, setupVectors.combinedTangentNormal));
-    // Blend the base Gerstner normal (worldNormal) with the high - frequency normal map detail (worldSpaceCombinedNormal),
-    // weighted by _GlintChoppiness (which acts as a normal strength factor)
-    setupVectors.finalNormal = normalize(setupVectors.worldNormal + (worldSpaceCombinedNormal * glintChoppiness));
-    //
-
-    // CALCULATE LIGHTING DATA
-    //setupVectors.worldViewDir = normalize(UnityWorldSpaceViewDir(input.worldPos));
-    setupVectors.worldViewDir = normalize(CalculateWorldSpaceViewDir(setupVectors.worldPos));
-    setupVectors.lightDir = mainLightDirection; //normalize(_MainLightPosition.xyz); // TODO - Make sure switch to node works !
-    // The Shared Reflection Vector (Calculated once)
-    setupVectors.reflectionVector = reflect(- setupVectors.worldViewDir, setupVectors.finalNormal);
-    setupVectors.viewDotNormal = dot(setupVectors.worldViewDir, setupVectors.finalNormal);
-    //
-
-    return setupVectors;
+    return dataVectors;
 }
 
-half3 GetBaseSurfaceColor(SurfaceDataVectors setupVectors, half3 reflectionColor, float3 baseWaterColor)
+SurfaceDataVectors CalculateGesternWaveTangentSpaceMatrix(SurfaceDataVectors dataVectors)
+{
+    // ddx / ddy calculate the vector change in X and Y screen space directions (local derivatives)
+    half3 worldTangent = normalize(ddx(dataVectors.worldPos));
+    half3 worldBinormal = normalize(ddy(dataVectors.worldPos));
+    half3 geometricWorldNormal = normalize(cross(worldTangent, worldBinormal)); // Gerstner Wave Normal
+    dataVectors.worldNormal = geometricWorldNormal;
+
+    // Re - orthogonalize T and B relative to the correct geometric normal
+    worldBinormal = normalize(cross(dataVectors.worldNormal, worldTangent));
+    worldTangent = normalize(cross(worldBinormal, dataVectors.worldNormal));
+
+    // Build the TBN matrix for applying normal map details
+    dataVectors.tangentSpaceMatrix = half3x3(worldTangent, worldBinormal, dataVectors.worldNormal);
+    // -- CALCULATE TBN BASIS VECTORS END --
+
+    return dataVectors;
+}
+
+SurfaceDataVectors CalculateFinalDistortedNormal(SurfaceDataVectors dataVectors, half glintChoppiness)
+{
+    // Transform the combined tangent space normal to world space
+    half3 worldSpaceCombinedNormal = normalize(mul(dataVectors.tangentSpaceMatrix, dataVectors.combinedTangentNormal));
+    // Blend the base Gerstner normal (worldNormal) with the high - frequency normal map detail (worldSpaceCombinedNormal),
+    // weighted by _GlintChoppiness (which acts as a normal strength factor)
+    dataVectors.finalNormal = normalize(dataVectors.worldNormal + (worldSpaceCombinedNormal * glintChoppiness));
+    return dataVectors;
+}
+
+SurfaceDataVectors CalculateLightningData(SurfaceDataVectors dataVectors, half3 mainLightDirection)
+{
+    //dataVectors.worldViewDir = normalize(UnityWorldSpaceViewDir(input.worldPos));
+    dataVectors.worldViewDir = normalize(CalculateWorldSpaceViewDir(dataVectors.worldPos));
+    dataVectors.lightDir = mainLightDirection; //normalize(_MainLightPosition.xyz); // TODO - Make sure switch to node works !
+
+    // The Shared Reflection Vector (Calculated once)
+    dataVectors.reflectionVector = reflect(- dataVectors.worldViewDir, dataVectors.finalNormal);
+    dataVectors.viewDotNormal = dot(dataVectors.worldViewDir, dataVectors.finalNormal);
+
+    return dataVectors;
+}
+
+SurfaceDataVectors CalculateDataVectors(half time, half3 worldPos, half4 screenPos, half2 uvBase, half glintChoppiness, UnityTexture2D normalMap1, UnityTexture2D duDvMap1, half2 normalMap1speed, UnityTexture2D normalMap2, UnityTexture2D duDvMap2, half2 normalMap2speed, half3 mainLightDirection, half distortionFactor)
+{
+    SurfaceDataVectors dataVectors;
+
+    // SET UP MAIN VECTORS
+    dataVectors = InitDataVectors(dataVectors, worldPos, screenPos, uvBase);
+
+    // -- SAMPLE TEXTURE MAPS --
+    dataVectors = SampleMaps(time, dataVectors, normalMap1, duDvMap1, normalMap1speed, normalMap2, duDvMap2, normalMap2speed, distortionFactor);
+
+    // -- CALCULATE TBN SPACE MATRIX --
+    dataVectors = CalculateGesternWaveTangentSpaceMatrix(dataVectors);
+
+    // The Final Distorted World Normal (Used for ALL lighting / reflection)
+    dataVectors = CalculateFinalDistortedNormal(dataVectors, glintChoppiness);
+
+    // CALCULATE LIGHTING DATA
+    dataVectors = CalculateLightningData(dataVectors, mainLightDirection);
+
+    return dataVectors;
+}
+
+half3 GetBaseSurfaceColor(SurfaceDataVectors dataVectors, half3 reflectionColor, float3 baseWaterColor)
 {
     // Now _WaveColor is the primary base color, no need for redundant texture sampling.
     //half3 baseWaterColor = waveColor.rgb;
@@ -172,7 +169,7 @@ half3 GetBaseSurfaceColor(SurfaceDataVectors setupVectors, half3 reflectionColor
     //return baseWaterColor;
     //#else
     // Otherwise, use Fresnel to blend the base color with the reflection color.
-    half reflectionFactor = pow(1.0 - saturate(setupVectors.viewDotNormal), 5.0); // Standard Fresnel
+    half reflectionFactor = pow(1.0 - saturate(dataVectors.viewDotNormal), 5.0); // Standard Fresnel
     half3 blendedColor = lerp(baseWaterColor, reflectionColor, reflectionFactor);
 
     return blendedColor;
@@ -204,7 +201,7 @@ half3 MainLightDirection,
 out half3 Emission,
 out half3 FinalNormal
 ) {
-    SurfaceDataVectors setupVectors = CalculateSetupVectors (
+    SurfaceDataVectors dataVectors = CalculateDataVectors (
     Time,
 
     WorldPos,
@@ -227,10 +224,10 @@ out half3 FinalNormal
 
     half3 skyReflection = 0;
 
-    half3 emission = GetBaseSurfaceColor(setupVectors, skyReflection, WaveColor);
+    half3 emission = GetBaseSurfaceColor(dataVectors, skyReflection, WaveColor);
 
     Emission = emission;
-    FinalNormal = setupVectors.finalNormal;
+    FinalNormal = dataVectors.finalNormal;
 }
 
 #endif
