@@ -1,6 +1,6 @@
 // GesternWave.hlsl - Calculates the 3D position offset (displacement) for a single wave.
-#ifndef SURF_GESTERN_WAVE_CALCULATION
-#define SURF_GESTERN_WAVE_CALCULATION
+#ifndef SURF_GESTERN_WAVE_NODE
+#define SURF_GESTERN_WAVE_NODE
 
 // TODO - Put in Include Later on
 
@@ -128,7 +128,6 @@ SurfaceDataVectors CalculateGesternWaveTangentSpaceMatrix(SurfaceDataVectors dat
 
     // Build the TBN matrix for applying normal map details
     dataVectors.tangentSpaceMatrix = half3x3(worldTangent, worldBinormal, dataVectors.worldNormal);
-    // -- CALCULATE TBN BASIS VECTORS END --
 
     return dataVectors;
 }
@@ -140,6 +139,7 @@ SurfaceDataVectors CalculateFinalDistortedNormal(SurfaceDataVectors dataVectors,
     // Blend the base Gerstner normal (worldNormal) with the high - frequency normal map detail (worldSpaceCombinedNormal),
     // weighted by _GlintChoppiness (which acts as a normal strength factor)
     dataVectors.finalNormal = normalize(dataVectors.worldNormal + (worldSpaceCombinedNormal * glintChoppiness));
+
     return dataVectors;
 }
 
@@ -156,32 +156,12 @@ SurfaceDataVectors CalculateLightningData(SurfaceDataVectors dataVectors, half3 
     return dataVectors;
 }
 
-half3 GetBaseSurfaceColor(SurfaceDataVectors dataVectors, half3 reflectionColor, float3 baseWaterColor)
-{
-    // Now _WaveColor is the primary base color, no need for redundant texture sampling.
-    //half3 baseWaterColor = waveColor.rgb;
-
-    // -- - TEXTURE SURFACE CHECK -- -
-    //#ifdef _ENABLE_COLOR_SURFACE_ON
-    // If pure texture mode is on, return the tinted wave color directly.
-    //return baseWaterColor;
-    //#else
-    // Otherwise, use Fresnel to blend the base color with the reflection color.
-    half reflectionFactor = pow(1.0 - saturate(dataVectors.viewDotNormal), 5.0); // Standard Fresnel
-    half3 blendedColor = lerp(baseWaterColor, reflectionColor, reflectionFactor);
-
-    return blendedColor;
-    //#endif
-}
-
 void Surf_GerstnerWave_float(
 half Time,
 
-half3 WorldPos, // World Position - Will be transformed to OBJECT SPACE with Transform Node
+half3 WorldPos,
 half4 ScreenPos,
 half2 UV_Base,
-
-float3 WaveColor,
 
 UnityTexture2D NormalMap1,
 UnityTexture2D DuDvMap1,
@@ -196,16 +176,17 @@ half GlintChoppiness,
 
 half3 MainLightDirection,
 
-out half3 Emission,
-out half3 FinalNormal
+out half3 FinalNormal,
+out half ViewDotNormal
 ) {
-    // SET UP MAIN VECTORS
+    // SET UP MAIN DATA
     InitMeta initMeta;
     initMeta.worldPos = WorldPos;
     initMeta.screenPos = ScreenPos;
     initMeta.uvBase = UV_Base;
 
     SurfaceDataVectors dataVectors = InitSurfaceData(initMeta);
+    //
 
     // -- SAMPLE TEXTURE MAPS --
     MapsMeta mapsMeta;
@@ -229,14 +210,10 @@ out half3 FinalNormal
     dataVectors = CalculateFinalDistortedNormal(dataVectors, GlintChoppiness);
 
     // CALCULATE LIGHTING DATA
-    dataVectors = CalculateLightningData(dataVectors, MainLightDirection);
+    dataVectors = CalculateLightningData(dataVectors, MainLightDirection);        
 
-    half3 skyReflection = 0;
-
-    half3 emission = GetBaseSurfaceColor(dataVectors, skyReflection, WaveColor);
-
-    Emission = emission;
     FinalNormal = dataVectors.finalNormal;
+    ViewDotNormal = dataVectors.viewDotNormal;
 }
 
 #endif
