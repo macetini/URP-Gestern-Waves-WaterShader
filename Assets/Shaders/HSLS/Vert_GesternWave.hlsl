@@ -1,6 +1,6 @@
 // GesternWave.hlsl - Calculates the 3D position offset (displacement) for a single wave.
-#ifndef VERT_GESTERN_WAVE_CALCULATION
-#define VERT_GESTERN_WAVE_CALCULATION
+#ifndef VERT_GESTERN_WAVE_NODE
+#define VERT_GESTERN_WAVE_NODE
 
 // Define PI constant (Better safe than sorry)
 #ifndef PI

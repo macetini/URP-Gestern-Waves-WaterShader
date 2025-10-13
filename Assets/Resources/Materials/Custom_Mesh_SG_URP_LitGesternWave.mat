@@ -110,6 +110,9 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReflectionIntensity: 0.002
+    - _SSDiffusion: 0.5
+    - _SSPower: 4
+    - _SSScale: 1
     - _TimeScale: 0
     - _Wave1Amplitude: 3
     - _Wave1Speed: 0.2
@@ -125,6 +128,7 @@ Material:
     - _FoamColor: {r: 0, g: 0, b: 0, a: 0}
     - _NormalMap_1_ScrollSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _NormalMap_2_ScrollSpeed: {r: 1, g: 1, b: 0, a: 0}
+    - _SSColor: {r: 0, g: 0.4, b: 0.5, a: 1}
     - _ShallowColor: {r: 0, g: 0, b: 0, a: 0}
     - _SurfaceColor: {r: 0, g: 0.48584557, b: 1, a: 0}
     - _Wave1Direction: {r: 1, g: 0.5, b: 0, a: 0}

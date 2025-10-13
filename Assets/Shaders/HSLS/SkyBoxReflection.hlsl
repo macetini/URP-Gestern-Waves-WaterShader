@@ -1,6 +1,6 @@
 // CalculateReflection.hlsl - Calculates blended skybox reflection using Fresnel.
-#ifndef CALCULATE_REFLECTION_INCLUDED
-#define CALCULATE_REFLECTION_INCLUDED
+#ifndef CALCULATE_SKYBOX_REFLECTION_NODE
+#define CALCULATE_SKYBOX_REFLECTION_NODE
 
 void SkyBoxReflection_float(
 float3 SurfaceColor,

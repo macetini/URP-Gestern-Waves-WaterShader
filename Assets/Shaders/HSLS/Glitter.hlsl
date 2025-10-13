@@ -1,5 +1,5 @@
-#ifndef GLITTER_FUNCTION
-#define GLITTER_FUNCTION
+#ifndef GLITTER_NODE
+#define GLITTER_NODE
 
 void Glitter_float(
 // Inputs from Gestern Wave Node

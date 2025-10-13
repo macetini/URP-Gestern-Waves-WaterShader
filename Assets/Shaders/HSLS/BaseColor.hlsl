@@ -1,4 +1,3 @@
-// GesternWave.hlsl - Calculates the 3D position offset (displacement) for a single wave.
 #ifndef BASE_COLOR_NODE
 #define BASE_COLOR_NODE
 
