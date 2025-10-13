@@ -144,7 +144,7 @@ SurfaceDataVectors CalculateFinalDistortedNormal(SurfaceDataVectors dataVectors,
 }
 
 SurfaceDataVectors CalculateLightningData(SurfaceDataVectors dataVectors, half3 mainLightDirection)
-{    
+{
     dataVectors.worldViewDir = normalize(CalculateWorldSpaceViewDir(dataVectors.worldPos));
     dataVectors.lightDir = mainLightDirection;
 
@@ -156,6 +156,8 @@ SurfaceDataVectors CalculateLightningData(SurfaceDataVectors dataVectors, half3 
 }
 
 void Surf_GerstnerWave_float(
+
+// Input
 half Time,
 
 half3 WorldPos,
@@ -175,9 +177,11 @@ half GlintChoppiness,
 
 half3 MainLightDirection,
 
+// Output
 out half3 FinalNormal,
 out half ViewDotNormal,
-out half3 ReflectionVector
+out half3 ReflectionVector,
+out float3 LightDir
 ) {
     // SET UP MAIN DATA
     InitMeta initMeta;
@@ -214,7 +218,8 @@ out half3 ReflectionVector
 
     FinalNormal = dataVectors.finalNormal;
     ViewDotNormal = dataVectors.viewDotNormal;
-    ReflectionVector = dataVectors.reflectionVector;
+    ReflectionVector = dataVectors.reflectionVector;      
+    LightDir = dataVectors.lightDir;
 }
 
 #endif
