@@ -17,11 +17,11 @@ out half3 SubsurfaceScatterColor // Calculated Subsurface Scattering color to ad
     // Calculate NdotL using the final distorted normal
     float NdotL = dot(FinalNormal, LightDir);
 
-    // 1. Calculate the 'Transmission' lobe
+    // Calculate the 'Transmission' lobe
     // The saturate() function clamps the result to [0, 1] before powering.
     float SSS_Lobe = pow(saturate(- NdotL + SSDiffusion), SSPower);
 
-    // 2. Apply SSS properties
+    // Apply SSS properties
     SubsurfaceScatterColor = SSS_Lobe * SSColor * SSScale;
 }
 
