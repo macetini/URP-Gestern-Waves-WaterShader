@@ -10,7 +10,6 @@ half3 LightDir, // Main Light Direction
 
 // Shader Properties passed as Inputs
 UnityTexture2D GlintMaskTexture,
-
 half GlitterSharpness,
 half GlintMaskTiling,
 half GlitterIntensity,
