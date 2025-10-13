@@ -1,18 +1,15 @@
 #ifndef GLITTER_FUNCTION
 #define GLITTER_FUNCTION
 
-// Glitter_float is the function signature required for a Custom Function node in float precision
 void Glitter_float(
 // Inputs from Gestern Wave Node
 half3 ReflectionVector, // Reflection Vector (calculated outside the function)
 half3 ViewDotNormal, // Dot product of View Dir and Normal
 half2 GlintMaskUV, // UV coordinates for texture sampling
-
 half3 LightDir, // Main Light Direction
 
 // Shader Properties passed as Inputs
 UnityTexture2D GlintMaskTexture,
-//SamplerState Sampler_GlintMask,
 
 half GlitterSharpness,
 half GlintMaskTiling,
@@ -31,10 +28,8 @@ out half3 GlitterAdditiveColor // The final glitter color to add to the base col
     #else
     // Get the light color and intensity from URP
     Light mainLight = GetMainLight();
-    half3 lightColor = mainLight.color;    
+    half3 lightColor = mainLight.color;
     #endif
-
-    // -- - Core Glitter Calculation (Directly from your BiRP logic) -- -
 
     // Calculate the alignment with the light direction using the reflection vector
     half lightDotRefl = max(0, dot(LightDir, ReflectionVector));
@@ -59,4 +54,4 @@ out half3 GlitterAdditiveColor // The final glitter color to add to the base col
     GlitterAdditiveColor = finalGlitterFactor * lightColor;
 }
 
-#endif // GLITTER_URP_CUSTOM_FUNCTION
+#endif

@@ -49,6 +49,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _GlintMaskTexture:
+        m_Texture: {fileID: 2800000, guid: 92f869d3d007be94c8a04758f9c037cd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalMap1:
         m_Texture: {fileID: 2800000, guid: 2a840f47398f9db4aa9a5f0dacb6fe0c, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -69,6 +73,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SurfaceTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -84,11 +92,16 @@ Material:
     m_Ints: []
     m_Floats:
     - _DepthIntensity: 10
-    - _DistortionFactor: 0
+    - _DistortionFactor: 0.1
     - _FoamDepth: 0.15
     - _FresnelPower: 3
+    - _GlintChoppiness: 1
+    - _GlintMaskTiling: 5
+    - _GlitterIntensity: 1
+    - _GlitterSharpness: 500
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ReflectionIntensity: 0.0001
     - _TimeScale: 0
     - _Wave1Amplitude: 0.5
     - _Wave1Speed: 1
@@ -105,6 +118,7 @@ Material:
     - _NormalMap_1_ScrollSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _NormalMap_2_ScrollSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _ShallowColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SurfaceColor: {r: 0, g: 0, b: 1, a: 0}
     - _Wave1Direction: {r: 1, g: 0.5, b: 0, a: 0}
     - _Wave2Direction: {r: 0.5, g: 1, b: 0, a: 0}
     - _WaveColor: {r: 0, g: 0, b: 1, a: 0}
