@@ -18,7 +18,6 @@ half GlitterIntensity,
 out half3 GlitterAdditiveColor // The final glitter color to add to the base color
 )
 {
-    // -- - URP Light Data Access -- -
     // Get the main light data struct from URP's library
     // This is defined in URP's Lighting.hlsl
     #ifdef SHADERGRAPH_PREVIEW
@@ -38,7 +37,7 @@ out half3 GlitterAdditiveColor // The final glitter color to add to the base col
 
     // Texture Sampling : Use the Texture2D input and SamplerState to sample the mask
     //half textureMask = tex2D(GlintMask, GlintMaskUV * GlintMaskTiling).r; //GlintMask.Sample(Sampler_GlintMask, GlintMaskUV * GlintMaskTiling).r;
-    half textureMask = tex2D(GlintMaskTexture, GlintMaskUV * GlintMaskTiling).r;
+    half textureMask = SAMPLE_TEXTURE2D(GlintMaskTexture, GlintMaskTexture.samplerstate, GlintMaskUV * GlintMaskTiling).r;
 
     // Add a subtle mask for breakup (flicker)
     sunGlitterFactor *= (textureMask * 0.5 + 0.5);
