@@ -103,7 +103,7 @@ Material:
     - _DistortionFactor: 1
     - _FoamDepth: 0.15
     - _FresnelPower: 3
-    - _GlintChoppiness: 10
+    - _GlintChoppiness: 1
     - _GlintMaskTiling: 5
     - _GlitterIntensity: 1
     - _GlitterSharpness: 500
