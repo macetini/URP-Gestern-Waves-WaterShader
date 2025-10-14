@@ -23,11 +23,13 @@ half ScreenHeight,
 half3 DistortionVector,
 half4 ScreenPos,
 
-out half2 UV_Initial
+out half2 UV_Initial,
+out half4 CameraDepthTexelSize
 )
 {
     // Compute camera depth texel size
     half4 cameraDepthTexelSize = half4(1 / ScreenWidth, 1 / ScreenHeight, ScreenWidth, ScreenHeight);
+    CameraDepthTexelSize = cameraDepthTexelSize; // Output for second pass
 
     // Copy and scale distortion vector
     half3 distortionVector = DistortionVector;
@@ -38,20 +40,18 @@ out half2 UV_Initial
 }
 
 void UVCorrection_SecondPass_float(
-half2 UV_Initial, // from first pass
-half SurfaceDepth, // from Scene Depth node (sampled at current pixel)
-half BackgroundDepth, // from Scene Depth node (sampled at UV_Initial)
+half2 UV_Initial, // From first pass
+half4 CameraDepthTexelSize, // From first pass
+
 half3 DistortionVector,
 half4 ScreenPos,
-half ScreenWidth,
-half ScreenHeight,
+
+half SurfaceDepth,
+half BackgroundDepth, // from Scene Depth node (sampled at UV_Initial)
 
 out half2 CorrectedUV
 )
 {
-    // Compute camera depth texel size
-    half4 cameraDepthTexelSize = half4(1 / ScreenWidth, 1 / ScreenHeight, ScreenWidth, ScreenHeight);
-
     // Calculate difference between background depth and object depth
     half depthDifference = BackgroundDepth - SurfaceDepth;
 
@@ -61,9 +61,7 @@ out half2 CorrectedUV
     half3 correctedDistortion = DistortionVector * distortionFade;
 
     // Final corrected UV
-    half2 uvFinal = AlignWithGrabTexel((ScreenPos.xy + correctedDistortion.xy) / ScreenPos.w, cameraDepthTexelSize);
-
-    CorrectedUV = uvFinal;
+    CorrectedUV = AlignWithGrabTexel((ScreenPos.xy + correctedDistortion.xy) / ScreenPos.w, CameraDepthTexelSize);
 }
 
 #endif
