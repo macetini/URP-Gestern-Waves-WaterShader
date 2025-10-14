@@ -67,7 +67,7 @@ struct MapsMeta
 
 SurfaceDataVectors InitSurfaceData(InitMeta initMeta)
 {
-    SurfaceDataVectors dataVectors;
+    SurfaceDataVectors dataVectors = (SurfaceDataVectors)0;
 
     dataVectors.worldPos = initMeta.worldPos;
     dataVectors.uvBase = initMeta.uvBase;
@@ -181,7 +181,8 @@ half3 MainLightDirection,
 out half3 FinalNormal,
 out half ViewDotNormal,
 out half3 ReflectionVector,
-out float3 LightDir
+out half3 DistortionVector,
+out half3 LightDir
 ) {
     // SET UP MAIN DATA
     InitMeta initMeta;
@@ -218,7 +219,8 @@ out float3 LightDir
 
     FinalNormal = dataVectors.finalNormal;
     ViewDotNormal = dataVectors.viewDotNormal;
-    ReflectionVector = dataVectors.reflectionVector;      
+    ReflectionVector = dataVectors.reflectionVector;
+    DistortionVector = dataVectors.distortionVector;
     LightDir = dataVectors.lightDir;
 }
 
