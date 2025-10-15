@@ -100,7 +100,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _DepthIntensity: 10
-    - _DistortionFactor: 0.5
+    - _DistortionFactor: 1
     - _FoamDepth: 0.15
     - _FresnelPower: 3
     - _GlintChoppiness: 1
@@ -109,7 +109,7 @@ Material:
     - _GlitterSharpness: 500
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReflectionIntensity: 0.002
+    - _ReflectionIntensity: 0.0001
     - _SSDiffusion: 0.5
     - _SSPower: 4
     - _SSScale: 1
