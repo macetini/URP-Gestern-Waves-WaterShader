@@ -3,9 +3,9 @@
 #define CALCULATE_SKYBOX_REFLECTION_NODE
 
 void SkyBoxReflection_float(
-float3 SurfaceColor,
 half ViewDotNormal,
 float3 ReflectionVector,
+float3 SurfaceColor,
 half ReflectionIntensity,
 
 out half3 ReflectedColor
