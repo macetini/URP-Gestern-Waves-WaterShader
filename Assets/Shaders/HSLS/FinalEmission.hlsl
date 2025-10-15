@@ -16,13 +16,13 @@ float WaterAbsorptionRate
 }
 // Computes corrected UV for refraction / distortion
 void FinalEmission_float(
-half2 CorrectedUV, // From UVCorrection Node (Second Pass)
-float SurfaceDepth, // Scene Depth Node at current fragment (surface)
-float BackgroundDepth, // Scene Depth Node sampled at CorrectedUV
 half3 WaterFragment, // The base water color (Reflection + SSS + Glitter)
+half2 CorrectedUV, // From UVCorrection Node (Second Pass)
 
 half3 SceneColorAtUV, // Scene Color Node sampled at CorrectedUV
 
+float BackgroundDepth, // Scene Depth Node sampled at CorrectedUV
+float SurfaceDepth, // Scene Depth Node at current fragment (surface)
 
 half3 WaterAbsorptionColor,
 half WaterAbsorptionRate,
