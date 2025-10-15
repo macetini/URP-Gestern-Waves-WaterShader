@@ -100,27 +100,28 @@ Material:
     m_Ints: []
     m_Floats:
     - _DepthIntensity: 10
+    - _DetailStrength: 2
     - _DistortionFactor: 1
     - _FoamDepth: 0.15
     - _FresnelPower: 3
     - _GlintChoppiness: 1
-    - _GlintMaskTiling: 1
+    - _GlintMaskTiling: 5
     - _GlitterIntensity: 1
     - _GlitterSharpness: 500
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReflectionIntensity: 0.0001
+    - _ReflectionIntensity: 0.1
     - _SSDiffusion: 0.5
     - _SSPower: 4
     - _SSScale: 1
     - _TimeScale: 0
     - _WaterAbsorptionRate: 0.2
     - _Wave1Amplitude: 3
-    - _Wave1Speed: 0.2
+    - _Wave1Speed: 1
     - _Wave1Steepness: 1
-    - _Wave1Wavelength: 200
+    - _Wave1Wavelength: 500
     - _Wave2Amplitude: 2
-    - _Wave2Speed: 0.2
+    - _Wave2Speed: 2
     - _Wave2Steepness: 0.4
     - _Wave2Wavelength: 100
     m_Colors:
