@@ -9,13 +9,12 @@ half3 WorldNormal,
 out half3x3 TBN
 )
 {
-    half3 N = normalize(WorldNormal);
-
-    // Start with the normalized input Tangent
+    // Normalize input vectors
+    half3 N = normalize(WorldNormal);    
     half3 T = normalize(WorldTangentDir);
 
     // Compute a temporary Bitangent B (orthogonal to N and T)
-    // NOT normalized yet
+    // NOT normalized yet, as we will recompute T first
     half3 B_tmp = cross(N, T);
 
     // Recompute Tangent T, making it strictly orthogonal to N and B_tmp
