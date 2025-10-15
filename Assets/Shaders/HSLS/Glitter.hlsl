@@ -2,16 +2,13 @@
 #define GLITTER_NODE
 
 void Glitter_float(
-// Inputs from Gestern Wave Node
-half3 ReflectionVector, // Reflection Vector (calculated outside the function)
+half GlitterMask, // Glitter Mask Texture Sample (R Channel)
+
 half3 ViewDotNormal, // Dot product of View Dir and Normal
-half2 GlintMaskUV, // UV coordinates for texture sampling
+half3 ReflectionVector, // Reflection Vector (calculated outside the function)
 half3 LightDir, // Main Light Direction
 
-// Shader Properties passed as Inputs
-UnityTexture2D GlintMaskTexture,
 half GlitterSharpness,
-half GlintMaskTiling,
 half GlitterIntensity,
 
 // OUTPUT for Shader Graph
@@ -33,14 +30,10 @@ out half3 GlitterAdditiveColor // The final glitter color to add to the base col
     half lightDotRefl = max(0, dot(LightDir, ReflectionVector));
 
     // Calculate the base glint factor (sharp specular highlight)
-    half sunGlitterFactor = pow(lightDotRefl, GlitterSharpness);
-
-    // Texture Sampling : Use the Texture2D input and SamplerState to sample the mask
-    //half textureMask = tex2D(GlintMask, GlintMaskUV * GlintMaskTiling).r; //GlintMask.Sample(Sampler_GlintMask, GlintMaskUV * GlintMaskTiling).r;
-    half textureMask = SAMPLE_TEXTURE2D(GlintMaskTexture, GlintMaskTexture.samplerstate, GlintMaskUV * GlintMaskTiling).r;
+    half sunGlitterFactor = pow(lightDotRefl, GlitterSharpness);    
 
     // Add a subtle mask for breakup (flicker)
-    sunGlitterFactor *= (textureMask * 0.5 + 0.5);
+    sunGlitterFactor *= (GlitterMask * 0.5 + 0.5);
 
     // Calculate the Fresnel factor for view - angle scattering
     half fresnelFactor = pow(1.0 - ViewDotNormal, 5.0);

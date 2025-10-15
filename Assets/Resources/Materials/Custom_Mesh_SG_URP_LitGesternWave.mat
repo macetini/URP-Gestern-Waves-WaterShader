@@ -50,7 +50,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlintMaskTexture:
-        m_Texture: {fileID: 2800000, guid: 92f869d3d007be94c8a04758f9c037cd, type: 3}
+        m_Texture: {fileID: 2800000, guid: 26c535bc43e7ef540a91aedbd635d396, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlitterCustomFunction_bce041a6602148f6af14e8cb6368cd08_GlintMaskTexture_4_Texture2D:
@@ -104,7 +104,7 @@ Material:
     - _FoamDepth: 0.15
     - _FresnelPower: 3
     - _GlintChoppiness: 1
-    - _GlintMaskTiling: 5
+    - _GlintMaskTiling: 1
     - _GlitterIntensity: 1
     - _GlitterSharpness: 500
     - _QueueControl: 0
