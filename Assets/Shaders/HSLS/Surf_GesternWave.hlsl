@@ -80,7 +80,7 @@ half3 CalculateDistortionNormal(SurfaceDataVectors dataVectors, MapsMeta mapsMet
     half3 duDvMap1s = UnpackNormal(tex2D(mapsMeta.duDvMap1, dataVectors.duDvMapCoords.xy));
     half3 duDvMap2s = UnpackNormal(tex2D(mapsMeta.duDvMap2, dataVectors.duDvMapCoords.zw));
 
-    half3 duDVMapSum = duDvMap1s + duDvMap2s;
+    half3 duDVMapSum = normalize(duDvMap1s + duDvMap2s);
 
     // Transform the combined tangent space DuDv map into a world space direction vector
     half3 combinedDuDvNormal = normalize(mul(dataVectors.tangentSpaceMatrix, duDVMapSum));

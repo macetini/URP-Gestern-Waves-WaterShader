@@ -90,6 +90,7 @@
     "inout",
     "Lerp",
     "Mathf",
+    "MATRIXBUILD",
     "Ndot",
     "Orthogonalization",
     "Orthogonalize",
