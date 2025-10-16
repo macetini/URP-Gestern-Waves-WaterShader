@@ -16,6 +16,8 @@ half2 AlignWithGrabTexel(half2 uv, half4 cameraDepthTexelSize)
     return (floor(uv * cameraDepthTexelSize.zw) + 0.5) * abs(cameraDepthTexelSize.xy);
 }
 
+// - -- 1st Pass : initial distortion & artifact correction --
+
 // Computes corrected UV for refraction / distortion
 void UVCorrection_FirstPass_float(
 half ScreenWidth,
@@ -39,6 +41,10 @@ out half4 CameraDepthTexelSize
     UV_Initial = AlignWithGrabTexel((ScreenPos.xy + distortionVector.xy) / ScreenPos.w, cameraDepthTexelSize);
 }
 
+//
+
+// - -- 2nd Pass : depth-based distortion correction --
+
 void UVCorrection_SecondPass_float(
 half2 UV_Initial, // From first pass
 half4 CameraDepthTexelSize, // From first pass
@@ -46,22 +52,27 @@ half4 CameraDepthTexelSize, // From first pass
 half3 DistortionVector,
 half4 ScreenPos,
 
-half SurfaceDepth,
+half SurfaceDepth_Old,
 half BackgroundDepth, // from Scene Depth node (sampled at UV_Initial)
 
-out half2 CorrectedUV
+out half2 CorrectedUV,
+out half SurfaceDepth
 )
 {
     // Calculate difference between background depth and object depth
-    half depthDifference = BackgroundDepth - SurfaceDepth;
+    half surfaceDepth = UNITY_Z_0_FAR_FROM_CLIPSPACE(ScreenPos.z);
+    half depthDifference = BackgroundDepth - surfaceDepth;//SurfaceDepth_Old;
 
     // Fade distortion near intersections
-    half distortionFade = saturate(depthDifference * 100.0);
+    //half distortionFade = saturate(depthDifference * 100.0);
 
-    half3 correctedDistortion = DistortionVector * distortionFade;
+    half3 correctedDistortion = DistortionVector * saturate(depthDifference * 100.0);//distortionFade;
 
     // Final corrected UV
     CorrectedUV = AlignWithGrabTexel((ScreenPos.xy + correctedDistortion.xy) / ScreenPos.w, CameraDepthTexelSize);
+    SurfaceDepth = surfaceDepth;
 }
+
+//
 
 #endif

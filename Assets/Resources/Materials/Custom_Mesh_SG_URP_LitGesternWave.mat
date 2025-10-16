@@ -101,7 +101,7 @@ Material:
     m_Floats:
     - _DepthIntensity: 10
     - _DetailStrength: 2
-    - _DistortionFactor: 1
+    - _DistortionFactor: 0
     - _FoamDepth: 0.15
     - _FresnelPower: 3
     - _GlintChoppiness: 1
@@ -115,7 +115,7 @@ Material:
     - _SSPower: 4
     - _SSScale: 1
     - _TimeScale: 0
-    - _WaterAbsorptionRate: 0.2
+    - _WaterAbsorptionRate: 1
     - _Wave1Amplitude: 3
     - _Wave1Speed: 1
     - _Wave1Steepness: 1
@@ -133,7 +133,7 @@ Material:
     - _SSColor: {r: 0, g: 0.4, b: 0.5, a: 1}
     - _ShallowColor: {r: 0, g: 0, b: 0, a: 0}
     - _SurfaceColor: {r: 0, g: 0.48627424, b: 1, a: 0}
-    - _WaterAbsorptionColor: {r: 0, g: 0.42175367, b: 0.5660378, a: 1}
+    - _WaterAbsorptionColor: {r: 1, g: 0, b: 0.14509821, a: 1}
     - _Wave1Direction: {r: 1, g: 0.5, b: 0, a: 0}
     - _Wave2Direction: {r: 0.5, g: 1, b: 0, a: 0}
     - _WaveColor: {r: 0.70554465, g: 0.70554465, b: 0.990566, a: 0}
