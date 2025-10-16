@@ -122,7 +122,6 @@ out half2 UV_Base,
 
 // TBN MATRIX
 out half3 WaveVertexNormal, // Final World Normal (calculated via cross(B, T))
-//out half3 WaveVertexBiNormal, // Final World Normal
 out half3 WaveVertexTangent // Final World Tangent
 )
 {
@@ -146,8 +145,7 @@ out half3 WaveVertexTangent // Final World Tangent
     UV_Base = displacedVertPos.xy;
 
     // Calculate the final Normal using the cross product of the accumulated Tangent and Binormal vectors.
-    WaveVertexNormal = normalize(cross(tangentSpace.binormal, tangentSpace.tangent));
-    //WaveVertexBiNormal = normalize(tangentSpace.binormal);
+    WaveVertexNormal = normalize(cross(tangentSpace.binormal, tangentSpace.tangent));    
     WaveVertexTangent = normalize(tangentSpace.tangent);
 }
 
