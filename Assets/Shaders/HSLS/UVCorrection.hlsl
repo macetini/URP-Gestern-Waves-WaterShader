@@ -52,7 +52,6 @@ half4 CameraDepthTexelSize, // From first pass
 half3 DistortionVector,
 half4 ScreenPos,
 
-half SurfaceDepth_Old,
 half BackgroundDepth, // from Scene Depth node (sampled at UV_Initial)
 
 out half2 CorrectedUV,
