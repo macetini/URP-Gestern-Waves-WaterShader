@@ -16,9 +16,7 @@ out half3 FinalColor
 )
 {
     float absorptionRate = max(0.001, _WaterAbsorptionRate);
-
     float extinction = exp(- FinalDepthDifference * absorptionRate); // Exponential decay (1 = clear, 0 = opaque)
-
     half3 absorbedColor = lerp(WaterAbsorptionColor, UnderwaterColor, extinction);
 
     FinalColor = lerp(absorbedColor, WaterFragment, 1.0 - extinction);
