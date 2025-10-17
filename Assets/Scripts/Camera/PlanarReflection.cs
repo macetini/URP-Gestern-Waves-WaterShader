@@ -6,6 +6,7 @@ using UnityEngine.Rendering.Universal;
 using UnityEditor;
 #endif
 
+
 [ExecuteAlways]
 public class PlanarReflection : MonoBehaviour
 {
@@ -95,7 +96,6 @@ public class PlanarReflection : MonoBehaviour
 #pragma warning disable CS0618 // Type or member is obsolete
         UniversalRenderPipeline.RenderSingleCamera(context, reflectionCamera);
 #pragma warning restore CS0618
-
 
         // 6. Pass Texture AND Matrix to Material (ADDED LOGIC)
         if (targetMaterial != null)

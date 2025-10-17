@@ -109,7 +109,7 @@ Material:
     m_Floats:
     - _DepthIntensity: 10
     - _DetailStrength: 2
-    - _DistortionFactor: 0.05
+    - _DistortionFactor: 0.1
     - _FoamDepth: 0.15
     - _FoamMaxDistance: 2
     - _FoamSharpness: 1
@@ -119,8 +119,8 @@ Material:
     - _GlintMaskTiling: 5
     - _GlitterIntensity: 1
     - _GlitterSharpness: 50
-    - _NormalMap_1_SpeedFactor: 1
-    - _NormalMap_2_SpeedFactor: 1
+    - _NormalMap_1_SpeedFactor: 0.355
+    - _NormalMap_2_SpeedFactor: 0.289
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReflectionIntensity: 0.001

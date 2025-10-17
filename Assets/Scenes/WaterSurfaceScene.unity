@@ -8698,6 +8698,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1073770967}
+  - component: {fileID: 1073770968}
   m_Layer: 4
   m_Name: Ship
   m_TagString: Untagged
@@ -8852,6 +8853,20 @@ Transform:
   - {fileID: 1417869991}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 28.172, z: 0}
+--- !u!114 &1073770968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1073770966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a65d2d4967e89e46806898d57efb223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amplitude: 0.1
+  frequency: 1
 --- !u!1 &1088237978
 GameObject:
   m_ObjectHideFlags: 0
@@ -15809,6 +15824,7 @@ GameObject:
   - component: {fileID: 2072330928}
   - component: {fileID: 2072330930}
   - component: {fileID: 2072330929}
+  - component: {fileID: 2072330931}
   m_Layer: 4
   m_Name: Boat
   m_TagString: Untagged
@@ -15886,6 +15902,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2072330927}
   m_Mesh: {fileID: 8675452379081041382, guid: 6b8d29fc0dbf745449e262ee21c35634, type: 3}
+--- !u!114 &2072330931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2072330927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a65d2d4967e89e46806898d57efb223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amplitude: 0.1
+  frequency: 1
 --- !u!1 &2079647285
 GameObject:
   m_ObjectHideFlags: 0

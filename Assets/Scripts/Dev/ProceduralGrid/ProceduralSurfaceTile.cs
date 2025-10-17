@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.Dev.ProceduralSurface
+namespace Assets.Scripts.Dev.ProceduralGrid
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     public class ProceduralSurfaceTile : MonoBehaviour

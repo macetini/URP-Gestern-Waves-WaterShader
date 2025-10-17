@@ -1,28 +1,24 @@
-using Assets.Scripts.Dev.ProceduralSurface;
 using UnityEngine;
 
-public class ProceduralSurfaceGrid : MonoBehaviour
+namespace Assets.Scripts.Dev.ProceduralGrid
 {
-    public ProceduralSurfaceTile tilePrefab;
-    public int gridSizeX = 3; // Number of tiles in X direction
-    public int gridSizeZ = 3; // Number of tiles in Z direction
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class ProceduralSurfaceGrid : MonoBehaviour
     {
-        for (int x = 0; x < gridSizeX; x++)
+        public ProceduralSurfaceTile tilePrefab;
+        public int gridSizeX = 3; // Number of tiles in X direction
+        public int gridSizeZ = 3; // Number of tiles in Z direction
+
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
         {
-            for (int z = 0; z < gridSizeZ; z++)
+            for (int x = 0; x < gridSizeX; x++)
             {
-                Vector3 position = new(x * tilePrefab.xSize * tilePrefab.scale, 0, z * tilePrefab.zSize * tilePrefab.scale);
-                Instantiate(tilePrefab, position, Quaternion.identity, transform);
+                for (int z = 0; z < gridSizeZ; z++)
+                {
+                    Vector3 position = new(x * tilePrefab.xSize * tilePrefab.scale, 0, z * tilePrefab.zSize * tilePrefab.scale);
+                    Instantiate(tilePrefab, position, Quaternion.identity, transform);
+                }
             }
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
