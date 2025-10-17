@@ -116,27 +116,27 @@ Material:
     - _FoamTiling: 5
     - _FresnelPower: 3
     - _GlintChoppiness: 1
-    - _GlintMaskTiling: 5
-    - _GlitterIntensity: 1
-    - _GlitterSharpness: 50
-    - _NormalMap_1_SpeedFactor: 0.355
-    - _NormalMap_2_SpeedFactor: 0.289
+    - _GlintMaskTiling: 10
+    - _GlitterIntensity: 3
+    - _GlitterSharpness: 500
+    - _NormalMap_1_SpeedFactor: 0.35
+    - _NormalMap_2_SpeedFactor: 0.3
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReflectionIntensity: 0.001
-    - _SSDiffusion: 0.5
-    - _SSPower: 1
-    - _SSScale: 2
+    - _SSDiffusion: 1
+    - _SSPower: 5
+    - _SSScale: 0.6
     - _TimeScale: 0
-    - _WaterAbsorptionRate: 0.8
-    - _Wave1Amplitude: 0.2
+    - _WaterAbsorptionRate: 0.5
+    - _Wave1Amplitude: 0.5
     - _Wave1Speed: 0.8
     - _Wave1Steepness: 0.6
-    - _Wave1Wavelength: 10
-    - _Wave2Amplitude: 0.1
+    - _Wave1Wavelength: 20
+    - _Wave2Amplitude: 0.2
     - _Wave2Speed: 0.3
     - _Wave2Steepness: 0.5
-    - _Wave2Wavelength: 8
+    - _Wave2Wavelength: 10
     m_Colors:
     - _DeepColor: {r: 0.05882353, g: 0.2078431, b: 0.3372549, a: 0}
     - _DisplacedUV: {r: 0, g: 0, b: 0, a: 0}
@@ -147,7 +147,7 @@ Material:
     - _NormalMap_2_ScrollSpeed: {r: 0.01, g: 0.01, b: 0.01, a: 0.01}
     - _NormalMap_2_ScrollSpeed_old: {r: 1, g: 1, b: 0, a: 0}
     - _NormalMap_2_Speed: {r: 1, g: 1, b: 1, a: 1}
-    - _SSColor: {r: 0, g: 1, b: 0.96346426, a: 1}
+    - _SSColor: {r: 0, g: 0.1215651, b: 1, a: 1}
     - _ShallowColor: {r: 0, g: 0, b: 0, a: 0}
     - _SurfaceColor: {r: 0, g: 0.022294998, b: 1, a: 1}
     - _WaterAbsorptionColor: {r: 0, g: 0.29999998, b: 0.39999998, a: 1}

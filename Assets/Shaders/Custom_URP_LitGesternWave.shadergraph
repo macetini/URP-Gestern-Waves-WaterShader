@@ -9127,10 +9127,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -3971.999755859375,
-            "y": -2502.99951171875,
+            "x": -3886.0,
+            "y": -2503.0,
             "width": 208.0,
-            "height": 301.999755859375
+            "height": 302.0
         }
     },
     "m_Slots": [
