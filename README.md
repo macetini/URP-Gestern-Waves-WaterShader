@@ -1,8 +1,10 @@
-# Unlit Gerstner Wave Shader
+# Gerstner Wave Shader
 
 <img width="1370" height="573" alt="w1" src="https://github.com/user-attachments/assets/baabf78b-40c2-4673-ab32-571a28eca180" />
 
 ## Overview
+
+<img width="732" height="369" alt="gw" src="https://github.com/user-attachments/assets/8d46b14a-0805-493d-b067-8d3e18884b72" />
 
 URP experiment that was supposed to create a Surface shader-like behaviour in the new Unity3D Pipeline.
 This shader simulates a realistic water surface using the Gerstner Wave equation. 
