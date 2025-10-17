@@ -119,6 +119,8 @@ Material:
     - _GlintMaskTiling: 5
     - _GlitterIntensity: 1
     - _GlitterSharpness: 50
+    - _NormalMap_1_SpeedFactor: 1
+    - _NormalMap_2_SpeedFactor: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReflectionIntensity: 0.001
@@ -141,8 +143,10 @@ Material:
     - _FoamColor: {r: 1, g: 1, b: 1, a: 0}
     - _NormalMap_1_ScrollSpeed: {r: 0.01, g: 0.01, b: 0.01, a: 0.01}
     - _NormalMap_1_ScrollSpeed_old: {r: 1, g: 1, b: 0, a: 0}
+    - _NormalMap_1_Speed: {r: 1, g: 1, b: 1, a: 1}
     - _NormalMap_2_ScrollSpeed: {r: 0.01, g: 0.01, b: 0.01, a: 0.01}
     - _NormalMap_2_ScrollSpeed_old: {r: 1, g: 1, b: 0, a: 0}
+    - _NormalMap_2_Speed: {r: 1, g: 1, b: 1, a: 1}
     - _SSColor: {r: 0, g: 1, b: 0.96346426, a: 1}
     - _ShallowColor: {r: 0, g: 0, b: 0, a: 0}
     - _SurfaceColor: {r: 0, g: 0.022294998, b: 1, a: 1}

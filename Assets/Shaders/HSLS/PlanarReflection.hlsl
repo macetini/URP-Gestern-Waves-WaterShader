@@ -6,6 +6,8 @@ half3 FinalNormal, // Fragment's surface normal
 half3 WorldPos, // Fragment's position in world space
 half3 ViewDir, // View direction vector (for Fresnel)
 
+float2 DistortionVector, // UVs for sampling the Distortion Texture (e.g., tiling / scrolling noise UVs)
+
 out half3 ReflectedColor // Calculated Reflected Color (to be added / Lerped with Albedo)
 )
 {
@@ -15,7 +17,7 @@ out half3 ReflectedColor // Calculated Reflected Color (to be added / Lerped wit
     float4 reflectionUV_Homogeneous = mul(_WorldToReflection, float4(WorldPos, 1.0));
 
     // Perform Perspective Division : xy / w to get normalized screen coordinates (UVs)
-    float2 reflectionUV = reflectionUV_Homogeneous.xy / reflectionUV_Homogeneous.w;
+    float2 reflectionUV = reflectionUV_Homogeneous.xy / reflectionUV_Homogeneous.w + DistortionVector;
 
     // -- - 2. Sample the Reflection Texture -- -
     // Sample the texture using the calculated UVs.
