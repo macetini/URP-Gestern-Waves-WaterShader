@@ -62,7 +62,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap2:
-        m_Texture: {fileID: 2800000, guid: 02d1ca76883dfbb4d9a442bfc5115272, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5d5c10aba3a10da4197adddf8482e0af, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PlanarReflectionTex:
@@ -117,8 +117,8 @@ Material:
     - _FresnelPower: 3
     - _GlintChoppiness: 1
     - _GlintMaskTiling: 5
-    - _GlitterIntensity: 10
-    - _GlitterSharpness: 500
+    - _GlitterIntensity: 1
+    - _GlitterSharpness: 5
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReflectionIntensity: 0.1
@@ -127,14 +127,14 @@ Material:
     - _SSScale: 1
     - _TimeScale: 0
     - _WaterAbsorptionRate: 0.1
-    - _Wave1Amplitude: 3
-    - _Wave1Speed: 1.5
-    - _Wave1Steepness: 1
-    - _Wave1Wavelength: 500
+    - _Wave1Amplitude: 5
+    - _Wave1Speed: 1.2
+    - _Wave1Steepness: 0.3
+    - _Wave1Wavelength: 650
     - _Wave2Amplitude: 2
     - _Wave2Speed: 1
-    - _Wave2Steepness: 0.4
-    - _Wave2Wavelength: 100
+    - _Wave2Steepness: 0.2
+    - _Wave2Wavelength: 1000
     m_Colors:
     - _DeepColor: {r: 0.05882353, g: 0.2078431, b: 0.3372549, a: 0}
     - _DisplacedUV: {r: 0, g: 0, b: 0, a: 0}
@@ -145,8 +145,8 @@ Material:
     - _NormalMap_2_ScrollSpeed_old: {r: 1, g: 1, b: 0, a: 0}
     - _SSColor: {r: 0, g: 0.4, b: 0.5, a: 1}
     - _ShallowColor: {r: 0, g: 0, b: 0, a: 0}
-    - _SurfaceColor: {r: 0, g: 0.48627424, b: 1, a: 0}
-    - _WaterAbsorptionColor: {r: 0.030356407, g: 0, b: 1, a: 1}
+    - _SurfaceColor: {r: 0, g: 0.030314207, b: 1, a: 0}
+    - _WaterAbsorptionColor: {r: 0, g: 0.3722396, b: 1, a: 1}
     - _Wave1Direction: {r: 0.2, g: 0.5, b: 0, a: 0}
     - _Wave2Direction: {r: 0.5, g: 0.75, b: 0, a: 0}
     - _WaveColor: {r: 0.70554465, g: 0.70554465, b: 0.990566, a: 0}
