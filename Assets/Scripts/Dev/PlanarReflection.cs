@@ -62,7 +62,7 @@ public class PlanarReflection : MonoBehaviour
         Vector3 surfacePos = transform.position;
 
         CopyCameraData(cam, reflectionCamera);
-        MirrorCamera(cam.transform.position, surfaceNormal, surfacePos);
+        MirrorCamera(cam.transform.position, surfaceNormal, surfacePos, cam.transform);
 
         // 3. Calculate Oblique Clip Plane and Projection
         Vector4 clipPlane = CameraSpacePlane(reflectionCamera, surfaceNormal, surfacePos, clipPlaneOffset);
@@ -141,7 +141,7 @@ public class PlanarReflection : MonoBehaviour
         dest.cullingMask = reflectionLayer;
     }
 
-    private void MirrorCamera(Vector3 camPos, Vector3 planeNormal, Vector3 planePos)
+    private void MirrorCamera(Vector3 camPos, Vector3 planeNormal, Vector3 planePos, Transform camTransform)
     {
         float d = -Vector3.Dot(planeNormal, planePos);
         Vector4 plane = new Vector4(planeNormal.x, planeNormal.y, planeNormal.z, d);
@@ -167,10 +167,14 @@ public class PlanarReflection : MonoBehaviour
         reflectionMatrix.m32 = 0F;
         reflectionMatrix.m33 = 1F;
 
+        // **FIXED POSITION CALCULATION**
         reflectionCamera.transform.position = reflectionMatrix.MultiplyPoint(camPos);
+
+        // **THE FIX FOR ROTATION:**
+        // We now mirror the main camera's forward and up vectors.
         reflectionCamera.transform.rotation = Quaternion.LookRotation(
-            reflectionMatrix.MultiplyVector(transform.forward),
-            reflectionMatrix.MultiplyVector(transform.up)
+            reflectionMatrix.MultiplyVector(camTransform.forward), // Mirror the main camera's forward
+            reflectionMatrix.MultiplyVector(camTransform.up)       // Mirror the main camera's up
         );
     }
 
@@ -180,7 +184,7 @@ public class PlanarReflection : MonoBehaviour
         Vector3 cnormal = cam.worldToCameraMatrix.MultiplyVector(normal).normalized;
         return new Vector4(cnormal.x, cnormal.y, cnormal.z, -Vector3.Dot(cnormal, cpos));
     }
-    
+
     private static void CalculateObliqueMatrix(ref Matrix4x4 projection, Vector4 clipPlane)
     {
         Vector4 q = projection.inverse * new Vector4(

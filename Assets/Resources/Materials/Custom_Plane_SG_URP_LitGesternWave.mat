@@ -38,7 +38,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _DuDvMap1:
-        m_Texture: {fileID: 2800000, guid: a0f2348dec84bce47bf9ca5ec26b8f85, type: 3}
+        m_Texture: {fileID: 2800000, guid: 873c2d9d507b7d54786c98db17a5524e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DuDvMap2:
@@ -54,7 +54,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap1:
-        m_Texture: {fileID: 2800000, guid: 5d5c10aba3a10da4197adddf8482e0af, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2a840f47398f9db4aa9a5f0dacb6fe0c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap2:
@@ -78,7 +78,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SurfaceTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: b242b09b0d63b1942a06c5142ac7d986, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -98,24 +98,24 @@ Material:
     - _DepthIntensity: 10
     - _DistortionFactor: 0.1
     - _FoamDepth: 0.15
-    - _FoamMaxDistance: 2
+    - _FoamMaxDistance: 1.5
     - _FoamSharpness: 1
-    - _FoamTiling: 10
+    - _FoamTiling: 5
     - _FresnelPower: 3
     - _GlintChoppiness: 1
     - _GlintMaskTiling: 5
     - _GlitterIntensity: 1
-    - _GlitterSharpness: 500
+    - _GlitterSharpness: 100
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReflectionIntensity: 0.0001
+    - _ReflectionIntensity: 0.001
     - _SSDiffusion: 0.5
-    - _SSPower: 5
-    - _SSScale: 1
+    - _SSPower: 1
+    - _SSScale: 2
     - _TimeScale: 0
-    - _WaterAbsorptionRate: 0.2
+    - _WaterAbsorptionRate: 0.35
     - _Wave1Amplitude: 0.2
-    - _Wave1Speed: 1
+    - _Wave1Speed: 0.4
     - _Wave1Steepness: 0.6
     - _Wave1Wavelength: 10
     - _Wave2Amplitude: 0.1
@@ -126,14 +126,14 @@ Material:
     - _DeepColor: {r: 0.05882353, g: 0.2078431, b: 0.3372549, a: 0}
     - _DisplacedUV: {r: 0, g: 0, b: 0, a: 0}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 0}
-    - _NormalMap_1_ScrollSpeed: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
-    - _NormalMap_2_ScrollSpeed: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
-    - _SSColor: {r: 0, g: 1, b: 0.96346426, a: 1}
+    - _NormalMap_1_ScrollSpeed: {r: 0.1, g: 0.1, b: 0.1, a: 0.1}
+    - _NormalMap_2_ScrollSpeed: {r: 0.1, g: 0.1, b: 0.1, a: 0.1}
+    - _SSColor: {r: 0, g: 0.6501589, b: 1, a: 1}
     - _ShallowColor: {r: 0, g: 0, b: 0, a: 0}
     - _SurfaceColor: {r: 0, g: 0, b: 1, a: 0}
     - _WaterAbsorptionColor: {r: 0, g: 0.29999998, b: 0.39999998, a: 1}
-    - _Wave1Direction: {r: 1, g: 0.5, b: 0, a: 0}
-    - _Wave2Direction: {r: 0.5, g: 1, b: 0, a: 0}
+    - _Wave1Direction: {r: 0.65, g: 0.5, b: 0, a: 0}
+    - _Wave2Direction: {r: 0.15, g: 0.75, b: 0, a: 0}
     - _WaveColor: {r: 0, g: 0, b: 1, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

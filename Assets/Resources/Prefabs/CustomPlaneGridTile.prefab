@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 1, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6599892073530939055}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3dc61e9d6dd48143885764beda8500a, type: 3}
   m_Name: 
@@ -102,5 +102,5 @@ MonoBehaviour:
   clipPlaneOffset: 0.07
   reflectionLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
-  textureSize: 1024
+    m_Bits: 16
+  textureSize: 512
